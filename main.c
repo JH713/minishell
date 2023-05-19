@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 00:41:22 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:55:26 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,21 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	// 파싱 구현
 	// syntax error NULL 반환 
 	t_info *info;
-	t_redirect	*re;
+	// t_redirect	*re;
 	(void)command;
 	(void)env_lst;
 	// char	**commands;
 	// char	**commands1;
 	// char	**commands2;
 
-	re = (t_redirect *)malloc(sizeof(t_redirect) * 1);
-	re[0].file = ft_strdup("EOF");
-	re[0].type = 1;
-	re[0].fd = NULL;
-	re[0].next = NULL;
-	// // re[1].file = ft_strdup("END");
-	// // re[1].type = 1;
+	// re = (t_redirect *)malloc(sizeof(t_redirect) * 2);
+	// re[0].file = ft_strdup("EOF");
+	// re[0].type = 1;
+	// re[0].fd = NULL;
+	// re[0].next = NULL;
+	// re[1].file = ft_strdup("output");
+	// re[1].type = 1;
+	// re[1].fd = NULL;
 	// re[1].next = NULL;
 	// // re[2].file = ft_strdup("abc");
 	// // re[2].type = 2;
@@ -59,9 +60,9 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	info->heredoc_num = 1;
 	// commands = ft_split(command, ' ');
 	info->commands = (t_command *)malloc(sizeof(t_command) * 1);
-	info->commands[0].command = ft_split("cat", ' ');
+	info->commands[0].command = ft_split(command, ' ');
 	info->commands[0].output = NULL;
-	info->commands[0].input = re;
+	info->commands[0].input = NULL;
 	// info->commands = (t_command *)malloc(sizeof(t_command) * 3);
 	// info->commands[0].command = ft_split("cat main.c", ' ');
 	// info->commands[0].output = NULL;

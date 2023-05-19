@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 00:37:17 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:08:24 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin_func(char **command, t_env **env_lst)
 
 	env = env_lst_to_arr(*env_lst);
 	env_num = env_lst_size(*env_lst);
-	if (ft_strncmp(command[0], "exit", 5) == 0 && command[1] == NULL)
+	if (ft_strncmp(command[0], "exit", 5) == 0)
 		exit(0);
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 	{

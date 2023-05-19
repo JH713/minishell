@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 16:49:07 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:09:01 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 
 int	check_builtin(char **command)
 {
-	if (ft_strncmp(command[0], "exit", 5) == 0 && command[1] == NULL)
+	if (ft_strncmp(command[0], "exit", 5) == 0)
 		return (1);
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 		return (1);
@@ -86,7 +86,7 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 	if (!check_builtin(command))
 		return (0);
 	redirect_process(NULL, info, 0);
-	if (ft_strncmp(command[0], "exit", 5) == 0 && command[1] == NULL)
+	if (ft_strncmp(command[0], "exit", 5) == 0)
 	{
 		ft_putendl_fd("exit", 1);
 		unlink_heredocs(info);
