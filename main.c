@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 01:33:50 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/19 00:41:22 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	// re[2].next = NULL;
 	info = (t_info *)malloc(sizeof(t_info));
 	info->process_num = 1;
-	info->heredoc_num = 0;
+	info->heredoc_num = 1;
 	// commands = ft_split(command, ' ');
 	info->commands = (t_command *)malloc(sizeof(t_command) * 1);
 	info->commands[0].command = ft_split("cat", ' ');

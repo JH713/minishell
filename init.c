@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 05:38:27 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 00:21:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:54:05 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init(int argc, char *argv[], char **env, t_env **env_lst)
 		ft_putendl_fd("Error: No arguments should be provided.", 2);
 		exit(1);
 	}
+	*env_lst = NULL;
 	get_env_lst(env_lst, env);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);

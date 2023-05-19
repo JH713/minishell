@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 01:28:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/19 16:49:07 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,37 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 	}
 }
 
+int	check_builtin(char **command)
+{
+	if (ft_strncmp(command[0], "exit", 5) == 0 && command[1] == NULL)
+		return (1);
+	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
+		return (1);
+	else if (ft_strncmp(command[0], "export", 7) == 0 && command[1])
+		return (1);
+	else if (ft_strncmp(command[0], "unset", 6) == 0 && command[1])
+		return (1);
+	else if (ft_strncmp(command[0], "pwd", 4) == 0 && command[1] == NULL)
+		return (1);
+	else if (ft_strncmp(command[0], "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(command[0], "echo", 5) == 0 && ft_strncmp(command[1], "-n", 3) == 0)
+		return (1);
+	return (0);
+}
+
 int	exec_single_builtin(t_info *info, t_env **env_lst)
 {
-	char	**path;
 	char	**command;
 
-	path = get_path(*env_lst);
-	redirect_process(NULL, info, 0);
 	command = info->commands[0].command;
+	if (!check_builtin(command))
+		return (0);
+	redirect_process(NULL, info, 0);
 	if (ft_strncmp(command[0], "exit", 5) == 0 && command[1] == NULL)
 	{
 		ft_putendl_fd("exit", 1);
+		unlink_heredocs(info);
 		exit(0);
 	}
 	return (builtin_func(command, env_lst));
