@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 19:09:01 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:34:12 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 	close_unused_pipes(i, info->process_num, proc);
 	redirect_process(proc, info, i);
 	command = info->commands[i].command;
-	if (builtin_func(command, env_lst))
+	if (builtin_func(info, command, env_lst))
 		exit (0);
 	full_path = execute_check(command[0], path);
 	free(command[0]);
@@ -65,9 +65,9 @@ int	check_builtin(char **command)
 		return (1);
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 		return (1);
-	else if (ft_strncmp(command[0], "export", 7) == 0 && command[1])
+	else if (ft_strncmp(command[0], "export", 7) == 0)
 		return (1);
-	else if (ft_strncmp(command[0], "unset", 6) == 0 && command[1])
+	else if (ft_strncmp(command[0], "unset", 6) == 0)
 		return (1);
 	else if (ft_strncmp(command[0], "pwd", 4) == 0 && command[1] == NULL)
 		return (1);
@@ -78,9 +78,23 @@ int	check_builtin(char **command)
 	return (0);
 }
 
+int	check_num(char *num)
+{
+	if (*num == '-' && *num)
+		num++;
+	while (*num)
+	{
+		if (!ft_isdigit(*num))
+			return (0);
+		num++;
+	}
+	return (1);
+}
+
 int	exec_single_builtin(t_info *info, t_env **env_lst)
 {
 	char	**command;
+	unsigned char exit_num;
 
 	command = info->commands[0].command;
 	if (!check_builtin(command))
@@ -89,8 +103,21 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 	if (ft_strncmp(command[0], "exit", 5) == 0)
 	{
 		ft_putendl_fd("exit", 1);
+		exit_num = 0;
+		if (command[1])
+		{
+			if (command[2])
+			{
+				minishell_error_not_exit(command[0], "too many arguments", 1);
+				return (1);
+			}
+			unlink_heredocs(info);
+			if (!check_num(command[1]))
+				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
+			exit_num = (unsigned char)ft_atoi(command[1]);
+		}
 		unlink_heredocs(info);
-		exit(0);
+		exit(exit_num);
 	}
-	return (builtin_func(command, env_lst));
+	return (builtin_func(info, command, env_lst));
 }

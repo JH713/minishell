@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 19:08:24 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 00:33:43 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,121 @@
 
 extern int exit_status;
 
-int	builtin_func(char **command, t_env **env_lst)
+void	free_sorted_lst(t_env *sorted_lst)
+{
+	t_env	*temp;
+
+	while (sorted_lst)
+	{
+		temp = sorted_lst;
+		sorted_lst = sorted_lst->next;
+		free(temp);
+	}
+}
+
+int	jh_strcmp(char	*s1, char *s2)
+{
+	size_t			idx;
+	unsigned char	*c1;
+	unsigned char	*c2;
+
+	idx = 0;
+	c1 = (unsigned char *)s1;
+	c2 = (unsigned char *)s2;
+	while (*(c1 + idx) == *(c2 + idx))
+	{
+		if (*(c1 + idx) == 0)
+			return (0);
+		++idx;
+	}
+	return (*(c1 + idx) - *(c2 + idx));
+}
+
+void	print_export_env(t_env *sorted_lst)
+{
+	while (sorted_lst)
+	{
+		ft_printf("declare -x %s=\"%s\"\n", sorted_lst->key, sorted_lst->value);
+		sorted_lst = sorted_lst->next;
+	}
+}
+
+t_env	*dup_env_lst(t_env *env_lst)
+{
+	t_env	*new_lst;
+
+	new_lst = (t_env *)malloc(sizeof(t_env));
+	new_lst->key = env_lst->key;
+	new_lst->value = env_lst->value;
+	new_lst->next = NULL;
+	return (new_lst);
+}
+
+t_env	*get_sorted_lst(t_env *env_lst)
+{
+	t_env	*sorted_lst;
+	t_env	*prev;
+	t_env	*curr;
+	t_env	*new;
+
+	if (env_lst == NULL)
+		return (NULL);
+	sorted_lst = dup_env_lst(env_lst);
+	env_lst = env_lst->next;
+	while (env_lst)
+	{
+		new = dup_env_lst(env_lst);
+		curr = sorted_lst;
+		while (curr)
+		{
+			if (jh_strcmp(new->key, curr->key) < 0)
+			{
+				new->next = curr;
+				if (curr == sorted_lst)
+					sorted_lst = new;
+				else
+					prev->next = new;
+				break ;
+			}
+			prev = curr;
+			curr = curr->next;
+		}
+		if (curr == NULL)
+			prev->next = new;
+		env_lst = env_lst->next;
+	}
+	return (sorted_lst);
+}
+
+void	export_env(t_env **env_lst, char **env)
+{
+	t_env	*new;
+	t_env	*curr;
+	int		i;
+	int		idx;
+
+	i = 0;
+	while (env[i])
+	{
+		curr = *env_lst;
+		idx = get_first_idx(env[i], '=');
+		while (curr)
+		{
+			if (ft_strncmp(curr->key, env[i], idx) == 0)
+			{
+				free(curr->value);
+				curr->value = ft_substr(env[i], idx + 1, ft_strlen(env[i]) - 1 - idx);
+				return ;
+			}
+			curr = curr->next;
+		}
+		new = env_lst_new(env[i]);
+		env_lst_add_back(env_lst, new);
+		++i;
+	}
+}
+
+int	builtin_func(t_info *info, char **command, t_env **env_lst)
 {
 	char	**env;
 	int		env_num;
@@ -22,20 +136,42 @@ int	builtin_func(char **command, t_env **env_lst)
 	env = env_lst_to_arr(*env_lst);
 	env_num = env_lst_size(*env_lst);
 	if (ft_strncmp(command[0], "exit", 5) == 0)
-		exit(0);
+	{
+		unsigned char exit_num;
+		exit_num = 0;
+		unlink_heredocs(info);
+		if (command[1])
+		{
+			if (command[2])
+				minishell_error(command[0], "too many arguments", 1);
+			if (!check_num(command[1]))
+				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
+			exit_num = (unsigned char)ft_atoi(command[1]);
+		}
+		exit(exit_num);
+	}
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 	{
 		print_env(env, env_num);
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "export", 7) == 0 && command[1])
+	else if (ft_strncmp(command[0], "export", 7) == 0)
 	{
-		get_env_lst(env_lst, &command[1]);
+		t_env	*sorted_lst;
+		if (command[1] == NULL)
+		{
+			sorted_lst = get_sorted_lst(*env_lst);
+			print_export_env(sorted_lst);
+			free_sorted_lst(sorted_lst);
+		}
+		else
+			export_env(env_lst, &command[1]);
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "unset", 6) == 0 && command[1])
+	else if (ft_strncmp(command[0], "unset", 6) == 0)
 	{
-		env_lst_unset(env_lst, &command[1]);
+		if (command[1])
+			env_lst_unset(env_lst, &command[1]);
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "pwd", 4) == 0 && command[1] == NULL)
