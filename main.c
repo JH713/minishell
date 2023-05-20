@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 18:55:26 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 02:13:43 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	main(int argc, char *argv[], char **env)
 	t_info		*info;
 	t_process	*process;
 	char		*temp;
+	int			ret;
 
 	init(argc, argv, env, &env_lst);
 	while (1)
@@ -113,10 +114,16 @@ int	main(int argc, char *argv[], char **env)
 			continue ;
 		if (info->process_num == 1)
 		{
-			if (exec_single_builtin(info, &env_lst))
+			ret = exec_single_builtin(info, &env_lst);
+			if (ret == 1)
 			{
 				unlink_heredocs(info);
 				exit_status = 0;
+				continue ;
+			}
+			else if (ret == -1)
+			{
+				unlink_heredocs(info);
 				continue ;
 			}
 		}

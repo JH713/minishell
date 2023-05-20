@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 00:33:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 02:46:48 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,15 @@ void	export_env(t_env **env_lst, char **env)
 			{
 				free(curr->value);
 				curr->value = ft_substr(env[i], idx + 1, ft_strlen(env[i]) - 1 - idx);
-				return ;
+				break ;
 			}
 			curr = curr->next;
 		}
-		new = env_lst_new(env[i]);
-		env_lst_add_back(env_lst, new);
+		if (curr == NULL)
+		{
+			new = env_lst_new(env[i]);
+			env_lst_add_back(env_lst, new);
+		}
 		++i;
 	}
 }
@@ -165,17 +168,39 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			free_sorted_lst(sorted_lst);
 		}
 		else
+		{
+			if (command[1][0] == '-')
+				return (0);
+			int i = 1;
+			int idx;
+			while (command[i])
+			{
+				idx = get_first_idx(command[i], '=');
+				if (idx == -1 | command[i][idx + 1] == 0)
+				{
+					minishell_error_not_exit(command[0], "argument must be in format of key=value", 1);
+					return (-1);
+				}
+				++i;
+			}
 			export_env(env_lst, &command[1]);
+		}
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "unset", 6) == 0)
 	{
 		if (command[1])
+		{
+			if (command[1][0] == '-')
+				return (0);
 			env_lst_unset(env_lst, &command[1]);
+		}
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "pwd", 4) == 0 && command[1] == NULL)
+	else if (ft_strncmp(command[0], "pwd", 4) == 0)
 	{
+		if (command[1] && command[1][0] == '-')
+			return (0);
 		char	*buf = NULL;
 		buf = getcwd(buf, 0);
 		ft_printf("%s\n", buf);
@@ -197,6 +222,8 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			}
 			ret = chdir(lst->value);
 		}
+		else if (command[1][0] == '-')
+			return (0);
 		else if (command[1][0] == '/' || command[1][0] == '.')
 			ret = chdir(command[1]);
 		else

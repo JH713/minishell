@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 22:23:07 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 00:39:06 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 01:44:12 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	expand_env(char **line, t_env *env_lst)
 		if ((*line)[i] == '$' && (*line)[i + 1] == '?')
 		{
 			env_value = ft_itoa(exit_status);
-			join_env(line, env_value, i, 2);
+			join_env(line, env_value, i, i + 2);
 			i += ft_strlen(env_value);
 		}
 		else if ((*line)[i] == '$')
@@ -60,7 +60,10 @@ void	expand_env(char **line, t_env *env_lst)
 			while ((*line)[i + j] && ft_inset((*line)[i + j], " $") == 0)
 				j++;
 			if (j == 1)
+			{
+				++i;
 				continue ;
+			}
 			env_key = ft_substr(&(*line)[i + 1], 0, j - 1);
 			lst = get_lst_by_key(env_lst, env_key);
 			if (lst == NULL)

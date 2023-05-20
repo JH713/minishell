@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 00:34:12 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 02:43:52 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_builtin(char **command)
 		return (1);
 	else if (ft_strncmp(command[0], "unset", 6) == 0)
 		return (1);
-	else if (ft_strncmp(command[0], "pwd", 4) == 0 && command[1] == NULL)
+	else if (ft_strncmp(command[0], "pwd", 4) == 0)
 		return (1);
 	else if (ft_strncmp(command[0], "cd", 3) == 0)
 		return (1);
@@ -109,7 +109,7 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 			if (command[2])
 			{
 				minishell_error_not_exit(command[0], "too many arguments", 1);
-				return (1);
+				return (-1);
 			}
 			unlink_heredocs(info);
 			if (!check_num(command[1]))
