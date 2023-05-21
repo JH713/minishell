@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 02:13:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:17:49 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	info->heredoc_num = 1;
 	// commands = ft_split(command, ' ');
 	info->commands = (t_command *)malloc(sizeof(t_command) * 1);
-	info->commands[0].command = ft_split(command, ' ');
-	info->commands[0].output = NULL;
-	info->commands[0].input = NULL;
+	(&(info->commands[0]))->command = ft_split(command, ' ');
+	(&(info->commands[0]))->output = NULL;
+	(&(info->commands[0]))->input = NULL;
 	// info->commands = (t_command *)malloc(sizeof(t_command) * 3);
 	// info->commands[0].command = ft_split("cat main.c", ' ');
 	// info->commands[0].output = NULL;
@@ -73,7 +73,50 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	// info->commands[2].command = ft_split("cat", ' ');
 	// info->commands[2].output = NULL;
 	// info->commands[2].input = NULL;
+	// printf("%s\n", (info->commands)[0].command[0]);
 	return (info);
+}
+
+void	print_info(t_info *info)
+{
+	ft_printf("process_num = %d\n", info->process_num);
+	ft_printf("heredoc_num = %d\n", info->heredoc_num);
+
+	int i = 0;
+	int j;
+	t_command *command;
+	t_redirect *input;
+	t_redirect *output;
+	while (i < info->process_num)
+	{
+		ft_printf("commands %d\n", i);
+		j = 0;
+		command = &(info->commands[i]);
+		input = command->input;
+		output = command->output;
+		while (command->command[j])
+		{
+			ft_printf("%s\n", command->command[j]);
+			j++;
+		}
+		while (input)
+		{
+			ft_printf("input\n");
+			ft_printf("type: %d\n", input->type);
+			ft_printf("type: %s\n", input->fd);
+			ft_printf("type: %s\n", input->file);
+			input = input->next;
+		}
+		while (output)
+		{
+			ft_printf("input\n");
+			ft_printf("type: %d\n", output->type);
+			ft_printf("type: %s\n", output->fd);
+			ft_printf("type: %s\n", output->file);
+			input = input->next;
+		}
+		++i;
+	}
 }
 
 int	main(int argc, char *argv[], char **env)
@@ -110,6 +153,7 @@ int	main(int argc, char *argv[], char **env)
 		info = parse_command(command, env_lst);
 		if (info == NULL)
 			continue ;
+		print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
 		if (info->process_num == 1)

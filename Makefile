@@ -6,7 +6,7 @@
 #    By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 21:56:35 by jihyeole          #+#    #+#              #
-#    Updated: 2023/05/20 16:56:25 by jihyeole         ###   ########.fr        #
+#    Updated: 2023/05/21 13:48:40 by jihyeole         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,9 @@ NAME = minishell
 SRCS = main.c init.c utils.c env_utils1.c env_utils2.c make_heredoc.c \
 	   error.c redirect.c expand_env.c pipe.c finalization.c check.c \
 	   exec.c builtin.c
+# SRCS = test.c init.c utils.c env_utils1.c env_utils2.c make_heredoc.c \
+# 	   error.c redirect.c expand_env.c pipe.c finalization.c check.c \
+# 	   exec.c builtin.c
 OBJS = $(SRCS:.c=.o)
 CC = CC
 CFLAGS = -Wall -Wextra -Werror -I/Users/jihyeole/.brew/opt/readline/include
