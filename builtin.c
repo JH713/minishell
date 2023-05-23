@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 01:13:30 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:36:58 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,18 @@ t_env	*get_sorted_lst(t_env *env_lst)
 		env_lst = env_lst->next;
 	}
 	return (sorted_lst);
+}
+
+int	check_option_n(char *str)
+{
+	if (*str != '-')
+		return (0);
+	str++;
+	while (*str == 'n')
+		str++;
+	if (*str == 0)
+		return (1);
+	return (0);
 }
 
 void	export_env(t_env **env_lst, char **env)
@@ -253,9 +265,11 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		int i;
 		if (command[1])
 		{
-			if (ft_strncmp(command[1], "-n", 3) == 0) // n 연속으로 나오는 경우나 -n -n -n과 같이 오는 경우 처리해주기 -n-n-n-n-n-n-n인 경우도 
+			if (check_option_n(command[1]))
 			{
-				i = 2;
+				int i = 2;
+				while (check_option_n(command[i]))
+					++i;
 				while (command[i])
 				{
 					ft_putstr_fd(command[i], 1);

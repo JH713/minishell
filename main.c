@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 00:41:20 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:50:40 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	exit_status;
 char	*read_command(void)
 {
 	char	*command;
+	char	*add;
+	char	*temp;
 
 	command = readline("minishell$ ");
 	if (command == NULL)
@@ -25,6 +27,24 @@ char	*read_command(void)
 		ft_putstr_fd("\033[11C", 1);
 		write(1, "exit\n", 5);
 		exit(0);
+	}
+	if (ft_strlen(command) == 0)
+	{
+		free(command);
+		return (NULL);
+	}
+	if (command[ft_strlen(command) - 1] == '|' && command[ft_strlen(command) - 2] != '|')
+	{
+		add = ft_strdup(" |");
+		while (add[ft_strlen(add) - 1] == '|' && add[ft_strlen(add) - 2] != '|')
+		{
+			free(add);
+			add = readline("> ");
+			temp = command;
+			command = ft_strjoin(command, add);
+			free(temp);
+		}
+		free(add);
 	}
 	if (ft_strlen(command) != 0)
 		add_history(command);
@@ -684,10 +704,8 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_env		*env_lst;
 	char		*command;
-	char		*add;
 	t_info		*info;
 	t_process	*process;
-	char		*temp;
 	int			ret;
 
 	init(argc, argv, env, &env_lst);
@@ -696,24 +714,7 @@ int	main(int argc, char *argv[], char **env)
 		command = read_command();
 		if (command == NULL)
 			continue ;
-		if (command[ft_strlen(command) - 1] == '|' && command[ft_strlen(command) - 2] != '|')
-		{
-			add = ft_strdup(" |");
-			while (add[ft_strlen(add) - 1] == '|' && add[ft_strlen(add) - 2] != '|')
-			{
-				free(add);
-				add = readline("> ");
-				temp = command;
-				command = ft_strjoin(command, add);
-				free(temp);
-			}
-			free(add);
-		}
-		if (ft_strncmp(command, "", 1) == 0) //나중에 parse에서 처리 - 아무것도 없으면 NULL로
-			continue ;
 		info = parse_command(command, env_lst);
-		if (info == NULL)
-			continue ;
 		// print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
