@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 02:43:52 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/24 00:59:21 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 	close_unused_pipes(i, info->process_num, proc);
 	redirect_process(proc, info, i);
 	command = info->commands[i].command;
+	if (command[0] == NULL) //heredoc 삭제해줘야할듯 
+		exit(0);
 	if (builtin_func(info, command, env_lst))
 		exit (0);
 	full_path = execute_check(command[0], path);
@@ -66,15 +68,40 @@ int	check_builtin(char **command)
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 		return (1);
 	else if (ft_strncmp(command[0], "export", 7) == 0)
+	{
+		if (command[1] && command[1][0] == '-')
+			return (0);
 		return (1);
+	}
 	else if (ft_strncmp(command[0], "unset", 6) == 0)
+	{
+		if (command[1] && command[1][0] == '-')
+			return (0);
 		return (1);
+	}
 	else if (ft_strncmp(command[0], "pwd", 4) == 0)
+	{
+		if (command[1] && command[1][0] == '-')
+			return (0);
 		return (1);
+	}
 	else if (ft_strncmp(command[0], "cd", 3) == 0)
+	{
+		if (command[1] && command[1][0] == '-')
+			return (0);
 		return (1);
-	else if (ft_strncmp(command[0], "echo", 5) == 0 && ft_strncmp(command[1], "-n", 3) == 0)
+	}
+	else if (ft_strncmp(command[0], "echo", 5) == 0)
+	{
+		if (command[1])
+		{
+			if (ft_strncmp(command[1], "-n", 3) == 0)
+				return (1);
+			else if (command[1][0] == '-')
+				return (0);
+		}
 		return (1);
+	}
 	return (0);
 }
 

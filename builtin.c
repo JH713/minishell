@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 02:46:48 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:13:30 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ t_env	*get_sorted_lst(t_env *env_lst)
 	env_lst = env_lst->next;
 	while (env_lst)
 	{
+		if (ft_strncmp(env_lst->key, "_", 2) == 0)
+		{
+			env_lst = env_lst->next;
+			continue ;
+		}
 		new = dup_env_lst(env_lst);
 		curr = sorted_lst;
 		while (curr)
@@ -136,6 +141,8 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 	char	**env;
 	int		env_num;
 
+	if (command[0] == NULL)
+		return (0);
 	env = env_lst_to_arr(*env_lst);
 	env_num = env_lst_size(*env_lst);
 	if (ft_strncmp(command[0], "exit", 5) == 0)
@@ -241,10 +248,37 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		}
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "echo", 5) == 0 && ft_strncmp(command[1], "-n", 3) == 0)
+	else if (ft_strncmp(command[0], "echo", 5) == 0)
 	{
-		if (command[2] != NULL)
-			ft_printf("%s", command[2]);
+		int i;
+		if (command[1])
+		{
+			if (ft_strncmp(command[1], "-n", 3) == 0) // n 연속으로 나오는 경우나 -n -n -n과 같이 오는 경우 처리해주기 -n-n-n-n-n-n-n인 경우도 
+			{
+				i = 2;
+				while (command[i])
+				{
+					ft_putstr_fd(command[i], 1);
+					if (command[i + 1] != NULL)
+						ft_putchar_fd(' ', 1);
+					++i;
+				}
+			}
+			else if (command[1][0] == '-')
+				return (0);
+			else
+			{
+				i = 1;
+				while (command[i])
+				{
+					ft_putstr_fd(command[i], 1);
+					if (command[i + 1] != NULL)
+						ft_putchar_fd(' ', 1);
+					++i;
+				}
+				ft_printf("\n");
+			}
+		}
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 23:54:26 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/24 00:55:40 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	env_lst_unset(t_env **env_lst, char **str)
 	i = 0;
 	while (str[i])
 	{
+		if (ft_strncmp(str[i], "_", 2) == 0)
+			continue ;
 		lst = *env_lst;
 		while (lst)
 		{
