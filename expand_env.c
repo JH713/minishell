@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 22:23:07 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/21 01:44:12 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/25 05:06:37 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	expand_env(char **line, t_env *env_lst)
 		else if ((*line)[i] == '$')
 		{
 			j = 1;
-			while ((*line)[i + j] && ft_inset((*line)[i + j], " $") == 0)
+			while ((*line)[i + j] && ft_inset((*line)[i + j], "\"\' $") == 0)
 				j++;
 			if (j == 1)
 			{

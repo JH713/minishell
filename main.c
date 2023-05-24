@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/25 03:41:13 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/25 06:01:45 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,7 +504,7 @@ int	expand_env_inner(char **line, t_env *env_lst, int *i, int flag)
 		}
 		else
 		{
-			while ((*line)[*i + j] && ft_inset((*line)[*i + j], " $") == 0)
+			while ((*line)[*i + j] && ft_inset((*line)[*i + j], "\"\' $") == 0)
 				j++;
 		}
 		if (j == 1)
@@ -611,7 +611,89 @@ char	*check_cmd(char	*content, t_env *env_lst)
 	return (temp);
 }
 
-int	check_word_num(t_list *list)
+int	count_whitespaces(char *str)
+{
+	int	cnt;
+	int	i;
+
+	cnt = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ')
+		{
+			while (str[i] == ' ')
+				++i;
+			++cnt;
+		}
+		else
+			++i;
+	}
+	return (cnt);
+}
+
+int count_word_with_expand(char *content, t_env *env_lst)
+{
+	int		i;
+	int		cnt;
+	int		j;
+	// char	*env_key;
+	// char	*env_value;
+	// t_env	*lst;
+	char	*temp;
+
+	if (content == NULL || content[0] == 0)
+		return (0);
+	temp = ft_strdup(content);
+	expand_env_2(&temp, env_lst);
+	j = ft_strlen(temp) - 1;
+	while (j >= 0 && temp[j] == ' ')
+		--j;
+	if (j < 0)
+	{
+		free(temp);
+		return (0);
+	}
+	else
+		temp[j + 1] = 0;
+	cnt = 1;
+	i = 0;
+	while (temp[i] == ' ')
+		++i;
+	while (temp[i])
+	{
+		if (temp[i] == '"')
+		{
+			j = i;
+			++i;
+			while (temp[i] && temp[i] != '"')
+				++i;
+			if (temp[i] == 0)
+				i = j;
+		}
+		else if (temp[i] == '\'')
+		{
+			j = i;
+			++i;
+			while (temp[i] && temp[i] != '\'')
+				++i;
+			if (temp[i] == 0)
+				i = j;
+		}
+		else if (temp[i] == ' ')
+		{
+			++cnt;
+			while (temp[i] == ' ')
+				++i;
+			continue ;
+		}
+		++i;
+	}
+	free(temp);
+	return (cnt);
+}
+
+int	check_word_num(t_list *list, t_env *env_lst)
 {
 	t_list	*temp;
 	int		len;
@@ -630,13 +712,72 @@ int	check_word_num(t_list *list)
 			flag = 1;
 		else
 		{
-			if (flag == 0)
-				num++;
+			if (flag == 0) //환경변수 확장했을 때 수를 더하도록 수정함 
+				//여기서 추가로 세주기 
+				num += count_word_with_expand(content, env_lst);
 			flag = 0;
 		}
 		temp = temp -> next;
 	}
 	return (num);
+}
+
+size_t	get_word_len(char *str)
+{
+	size_t	len;
+	size_t	temp;
+	len = 0;
+	while (str[len])
+	{
+		if (str[len] == '"')
+		{
+			temp = len;
+			++len;
+			while (str[len] && str[len] != '"')
+				++len;
+			if (str[len] == 0)
+				len = temp;
+		}
+		else if (str[len] == '\'')
+		{
+			temp = len;
+			++len;
+			while (str[len] && str[len] != '\'')
+				++len;
+			if (str[len] == 0)
+				len = temp;
+		}
+		else if (str[len] == ' ')
+			break ;
+		++len;
+	}
+	return (len);
+}
+
+char **split_word(char *str, int num)
+{
+	char	**str_arr;
+	size_t	i;
+	size_t	j;
+	size_t	word_len;
+
+	if (str == NULL)
+		return (NULL);
+	str_arr = (char **)malloc(sizeof(char *) * (num + 1));
+	i = 0;
+	j = 0;
+	while (i < (size_t)num)
+	{
+		while (str[j] == ' ')
+			j++;
+		word_len = get_word_len(&str[j]);
+		str_arr[i] = ft_substr(str, j, word_len);
+		// ft_printf("%s\n", str_arr[i]);
+		j += word_len;
+		++i;
+	}
+	str_arr[i] = 0;
+	return (str_arr);
 }
 
 t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_lst)
@@ -646,13 +787,14 @@ t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_l
 	char	*file;
 	int		num;
 	int		j;
-// ls >> asd
-// ls -> >> -> asd -> ls
-// 123>> len 2
-	if (((char *)list->content)[0] == '|') //이거 추가함 
+	char	*temp;
+	int	temp_num;
+	char **temp_arr;
+
+	if (((char *)list->content)[0] == '|')
 		list = list->next;
 	j = 0;
-	num = check_word_num(list);
+	num = check_word_num(list, env_lst);
 	init_command(command, num);
 	while (list && !ft_strcmp(list->content, "|"))
 	{
@@ -670,8 +812,22 @@ t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_l
 				file = check_cmd(list -> content, env_lst);
 				check_output(info, content, command, file);
 		}
-		else
-			(command->command)[j++] = ft_strdup(check_cmd(content, env_lst));
+		else //환경변수 확장한 것 split해서 가져온 후 command에 넣어줌 
+		{
+			temp_num = count_word_with_expand(content, env_lst);
+			temp = content;
+			expand_env_2(&temp, env_lst);
+			temp_arr = split_word(temp, temp_num);
+			free(temp);
+			int i = 0;
+			while (temp_arr[i])
+			{
+				(command->command)[j++] = ft_strdup(check_cmd(temp_arr[i], env_lst));
+				++i;
+			}
+			free(temp_arr);
+			//(command->command)[j++] = ft_strdup(check_cmd(content, env_lst));
+		}
 		list = list -> next;
 	}
 	return (list);
@@ -764,7 +920,7 @@ int	main(int argc, char *argv[], char **env)
 		command = read_command();
 		if (command == NULL)
 			continue ;
-		info = parse_command(command, env_lst);
+		info = parse_command(command, env_lst); 
 		// print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
