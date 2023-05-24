@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/25 06:01:45 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/25 06:44:56 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,18 +167,36 @@ int	check_prev(char *command, int i, t_list *cmds)
 
 void	error_m(int c)
 {
-	printf("Error%d\n", c);
-	exit(1);
+	if (c == 0)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		exit_status = 258;
+	}
+	else if (c == 6)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
+		exit_status = 258;
+	}
+	else
+		printf("Error%d\n", c);
+	// exit(1);
 }
 
-void	check_sep(char *sep)
+int	check_sep(char *sep)
 {
 	if (sep[0] == '<')
 		if (!(ft_strcmp(sep, "<") || ft_strcmp(sep, "<<")))
-			error_m(2);
+		{
+			error_m(2); //error 메세지 설정해야됨
+			return (0);
+		}
 	if (sep[0] == '>')
 		if (!(ft_strcmp(sep, ">") || ft_strcmp(sep, ">>")))
-			error_m(3);
+		{
+			error_m(3); //error 메세지 설정해야됨 
+			return (0);
+		}
+	return (1);
 }
 
 int	find_sep(char *command, int start, int i, t_list **cmds)
@@ -192,7 +210,8 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 			i++;
 		last = ft_lstlast(*cmds);//전꺼 free?
 		sep = ft_substr(command, start, i - start);
-		check_sep(sep);
+		if (!check_sep(sep))
+			return (-1);
 		last -> content = ft_strjoin(last -> content, sep);
 	}
 	else
@@ -200,7 +219,8 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 		while (command[i] && (command[i] == '<' || command[i] == '>'))
 				i++;
 		sep = ft_substr(command, start, i - start);
-		check_sep(sep);
+		if (!check_sep(sep))
+			return (-1);
 		add_list(sep, cmds);
 	}
 	return (i - start);
@@ -225,20 +245,30 @@ int	get_word(char *command, int i, t_list **cmds, int *flag)
 int	get_operator(char *command, int i, t_list **cmds, int *flag)
 {
 	int	start;
+	int	ret;
 
 	start = i;
 	if (command[i] && (command[i] == '<' || command[i] == '>'))
 	{
 		start = i;
 		if (*flag == 1)
-			error_m(0);
-		i += find_sep(command, start, i, cmds);
+		{
+			error_m(0); // 무슨 에런지 모르겠음 
+			return (-1);
+		}
+		ret = find_sep(command, start, i, cmds);
+		if (ret == -1)
+			return (-1);
+		i += ret;
 		*flag = 1;
 	}
 	if (command[i] == '|')
 	{
 		if (*flag == 2 || *flag == 1)
+		{
 			error_m(0);
+			return (-1);
+		}
 		add_list(ft_substr(command, i++, 1), cmds);
 		*flag = 2;
 	}
@@ -266,13 +296,17 @@ t_list	*split_command(char *command)
 				i++;
 			if (command[i] && (command[i] == '<' || command[i] == '>' \
 					|| command[i] == '|'))
+			{
 				i = get_operator(command, i, &cmds, &flag);
+				if (i == -1)
+					return (NULL); // list free하기? 
+			}
 		}
 	}
 	return (cmds);
 }
 
-void	check_error(t_list *list)
+int	check_error(t_list *list)
 {
 	int		flag;
 	char	*c;
@@ -280,11 +314,18 @@ void	check_error(t_list *list)
 	flag = 0;
 	c = list -> content;
 	if (ft_strcmp(c, "|"))
+	{
 		error_m(0);
+		return (1);
+	}
 	c = ft_lstlast(list)->content;
 	if (ft_strcmp(c, "<") || ft_strcmp(c, ">") || \
 				ft_strcmp(c, "<<") || ft_strcmp(c, ">>"))
+	{
 		error_m(6);
+		return (1);
+	}
+	return (0);
 }
 ///////////////////////////////////////////////////////////////
 int	pipe_num(t_list	*list)
@@ -835,29 +876,23 @@ t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_l
 
 t_info	*parse_command(char *command, t_env *env_lst)
 {
-	// 파싱 구현
-	// syntax error NULL 반환 
 	t_list	*list;
 	t_info	*info;
 	int		i;
 
 	i = 0;
 	list = split_command(command);
-	//list가 null이면 info가 null
-	check_error(list);
-	// t_list *temp = list;
-	// while(temp)
-	// {
-	// 	printf("%s\n", temp -> content);
-	// 	temp = temp -> next;
-	// }
+	if (list == NULL) //syntax error 시 return NULL;
+		return (NULL);
+	if (check_error(list)) //syntax error 시 return NULL;
+		return (NULL); //list 다 free해줘야함 
 	info = malloc(sizeof(t_info));
-	info -> heredoc_num = 0;
-	info -> process_num = pipe_num(list) + 1;
-	info -> commands = (t_command *)malloc(sizeof(t_command) * info->process_num);
+	info->heredoc_num = 0;
+	info->process_num = pipe_num(list) + 1;
+	info->commands = (t_command *)malloc(sizeof(t_command) * info->process_num);
 	while (i < info -> process_num)
 	{
-		list = put_command(info, &(info -> commands[i]), list, env_lst);
+		list = put_command(info, &(info->commands[i]), list, env_lst);
 		i++;
 	}
 	return (info);
@@ -920,7 +955,9 @@ int	main(int argc, char *argv[], char **env)
 		command = read_command();
 		if (command == NULL)
 			continue ;
-		info = parse_command(command, env_lst); 
+		info = parse_command(command, env_lst);
+		if (info == NULL)
+			continue ; 
 		// print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
