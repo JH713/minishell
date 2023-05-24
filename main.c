@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 01:50:40 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/25 03:41:13 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,45 @@
 
 int	exit_status;
 
+int check_consecutive_pipes(char *str)
+{
+	int	i;
+
+	if (str == NULL)
+		return (0);
+	i = ft_strlen(str) - 1;
+	while (i >= 0 && str[i] == ' ')
+		--i;
+	if (i < 0 || str[i] != '|')
+		return (0);
+	--i;
+	while (i >= 0 && str[i] == ' ')
+		--i;
+	if (i < 0 || str[i] != '|')
+		return (0);
+	return (1);
+}
+
+char last_char_without_whitespace(char *str)
+{
+	int	i;
+
+	if (str == NULL)
+		return (0);
+	i = ft_strlen(str) - 1;
+	while (i >= 0 && str[i] == ' ')
+		--i;
+	if (i < 0)
+		return (0);
+	return (str[i]);
+}
+
 char	*read_command(void)
 {
 	char	*command;
 	char	*add;
 	char	*temp;
+	int		i;
 
 	command = readline("minishell$ ");
 	if (command == NULL)
@@ -33,21 +67,37 @@ char	*read_command(void)
 		free(command);
 		return (NULL);
 	}
-	if (command[ft_strlen(command) - 1] == '|' && command[ft_strlen(command) - 2] != '|')
+	i = 0;
+	while (command[i] == ' ')
+		++i;
+	if (command[i] == 0)
 	{
-		add = ft_strdup(" |");
-		while (add[ft_strlen(add) - 1] == '|' && add[ft_strlen(add) - 2] != '|')
+		add_history(command);
+		free(command);
+		return (NULL);
+	}
+	if (command[i] == '|')
+	{
+		add_history(command);
+		return (command);
+	}
+	while (last_char_without_whitespace(command) == '|')
+	{
+		if (check_consecutive_pipes(command))
 		{
-			free(add);
-			add = readline("> ");
-			temp = command;
-			command = ft_strjoin(command, add);
-			free(temp);
+			add_history(command);
+			return (command);
 		}
+		add = readline("> ");
+		temp = command;
+		command= ft_strjoin(command, " ");
+		free(temp);
+		temp = command;
+		command = ft_strjoin(command, add);
+		free(temp);
 		free(add);
 	}
-	if (ft_strlen(command) != 0)
-		add_history(command);
+	add_history(command);
 	return (command);
 }
 
