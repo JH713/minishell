@@ -6,11 +6,13 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/19 00:30:33 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:12:53 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	exit_status;
 
 static char	*get_temp_name(void)
 {
@@ -35,30 +37,69 @@ static char	*get_temp_name(void)
 	return (name);
 }
 
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	exit_status = 1;
+}
+
+static void	hd_sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(2);
+}
+
 static int	heredoc_input(t_redirect *input, t_info *info, int j)
 {
 	char		*tempfile;
 	int			fd;
 	char		*line;
+	pid_t		pid;
 
 	tempfile = get_temp_name();
-	fd = open(tempfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
-		exit(1);
-	line = readline("> ");
-	if (line == NULL)
-		return (0);
-	while (ft_strncmp(input->file, line, ft_strlen(input->file) + 1) != 0)
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
 	{
-		ft_putendl_fd(line, fd);
-		free(line);
+		signal(SIGINT, hd_sigint_handler);
+		fd = open(tempfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (fd == -1)
+			exit(1);
 		line = readline("> ");
 		if (line == NULL)
-			return (0);
+			exit(0);
+		while (ft_strncmp(input->file, line, ft_strlen(input->file) + 1) != 0)
+		{
+			ft_putendl_fd(line, fd);
+			free(line);
+			line = readline("> ");
+			if (line == NULL)
+				exit(0);
+		}
 	}
+	int status;
+	int	stat;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		stat = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		stat = WTERMSIG(status);
+	else
+		stat = 0;
+	signal(SIGINT, sigint_handler);
 	free(input->file);
 	input->file = tempfile;
 	info->heredocs[j] = ft_strdup(input->file);
+	if (stat == 2)
+	{
+		exit_status = 1;
+		return (0);
+	}
 	return (1);
 }
 
@@ -67,26 +108,52 @@ static int	heredoc_input_expand(t_redirect *input, t_env *env, t_info *info, int
 	char		*tempfile;
 	int			fd;
 	char		*line;
+	pid_t		pid;
 
 	tempfile = get_temp_name();
-	fd = open(tempfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
-		exit(1);
-	line = readline("> ");
-	if (line == NULL)
-		return (0);
-	while (ft_strncmp(input->file, line, ft_strlen(input->file) + 1) != 0)
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
 	{
-		expand_env(&line, env);
-		ft_putendl_fd(line, fd);
-		free(line);
+		signal(SIGINT, hd_sigint_handler);
+		fd = open(tempfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (fd == -1)
+			exit(1);
 		line = readline("> ");
 		if (line == NULL)
-			return (0);
+			exit(0);
+		while (ft_strncmp(input->file, line, ft_strlen(input->file) + 1) != 0)
+		{
+			expand_env(&line, env);
+			ft_putendl_fd(line, fd);
+			free(line);
+			line = readline("> ");
+			if (line == NULL)
+				exit(0);
+		}
 	}
+	int status;
+	int	stat;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		stat = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		stat = WTERMSIG(status);
+	else
+		stat = 0;
+	// ft_printf("%d\n", stat);
+	signal(SIGINT, sigint_handler);
 	free(input->file);
 	input->file = tempfile;
 	info->heredocs[j] = ft_strdup(input->file);
+	if (stat == 2)
+	{
+		exit_status = 1;
+		return (0);
+	}
+	else if (stat == 1)
+		exit(1);
+	
 	return (1);
 }
 
