@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 01:36:58 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:16:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,18 +117,28 @@ int	check_option_n(char *str)
 	return (0);
 }
 
-void	export_env(t_env **env_lst, char **env)
+int	export_env(t_env **env_lst, char **env)
 {
 	t_env	*new;
 	t_env	*curr;
 	int		i;
 	int		idx;
+	int		flag;
 
 	i = 0;
+	flag = 1;
 	while (env[i])
 	{
 		curr = *env_lst;
 		idx = get_first_idx(env[i], '=');
+		char *key = ft_substr(env[i], 0, idx);
+		if (check_env_name(key) == 0)
+		{
+			minishell_argstr_error("unset", env[i], "not a valid identifier", 1);
+			flag = 0;
+			++i;
+			continue ;
+		}
 		while (curr)
 		{
 			if (ft_strncmp(curr->key, env[i], idx) == 0)
@@ -146,6 +156,21 @@ void	export_env(t_env **env_lst, char **env)
 		}
 		++i;
 	}
+	return (flag);
+}
+
+int check_env_name(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(str[0]))
+		return (0);
+	while (ft_isalnum(str[i]) || str[i] == '_')
+		++i;
+	if (str[i] != 0)
+		return (0);
+	return (1);
 }
 
 int	builtin_func(t_info *info, char **command, t_env **env_lst)
@@ -191,7 +216,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			if (command[1][0] == '-')
 				return (0);
 			int i = 1;
-			int idx;
+			int idx; 
 			while (command[i])
 			{
 				idx = get_first_idx(command[i], '=');
@@ -202,17 +227,19 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 				}
 				++i;
 			}
-			export_env(env_lst, &command[1]);
+			if (export_env(env_lst, &command[1]) == 0)
+				return (-1);
 		}
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "unset", 6) == 0)
+	else if (ft_strncmp(command[0], "unset", 6) == 0) // 환경변수 이름에 알파벳이랑 _만 들어가도록
 	{
 		if (command[1])
 		{
 			if (command[1][0] == '-')
 				return (0);
-			env_lst_unset(env_lst, &command[1]);
+			if (env_lst_unset(env_lst, &command[1]) == 0)
+				return (-1);
 		}
 		return (1);
 	}
@@ -293,6 +320,8 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 				ft_printf("\n");
 			}
 		}
+		else
+			ft_printf("\n");
 		return (1);
 	}
 	return (0);

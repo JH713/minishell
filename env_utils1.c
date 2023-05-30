@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 00:55:40 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:45:11 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,29 @@ t_env	*get_lst_by_key(t_env *env_lst, char *key)
 	return (NULL);
 }
 
-void	env_lst_unset(t_env **env_lst, char **str)
+int	env_lst_unset(t_env **env_lst, char **str)
 {
 	t_env	*lst;
 	t_env	*prev;
 	int		i;
+	int		flag;
 
 	i = 0;
+	flag = 1;
 	while (str[i])
 	{
 		if (ft_strncmp(str[i], "_", 2) == 0)
+		{
+			++i;
 			continue ;
+		}
+		if (check_env_name(str[i]) == 0)
+		{
+			minishell_argstr_error("unset", str[i], "not a valid identifier", 1);
+			flag = 0;
+			++i;
+			continue ;
+		}
 		lst = *env_lst;
 		while (lst)
 		{
@@ -94,4 +106,5 @@ void	env_lst_unset(t_env **env_lst, char **str)
 		}
 		++i;
 	}
+	return (flag); 
 }

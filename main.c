@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/25 06:44:56 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/30 22:04:07 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ char	*read_command(void)
 	char	*temp;
 	int		i;
 
+	if (exit_status == 2)
+	{
+		exit_status = 130;
+		printf("\n");
+	}
+	else if (exit_status == 3)
+	{
+		exit_status = 131;
+		printf("Quit: 3\n");
+	}
 	command = readline("minishell$ ");
 	if (command == NULL)
 	{
@@ -182,20 +192,46 @@ void	error_m(int c)
 	// exit(1);
 }
 
+void	error_m1(char *str)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("'\n", 2);
+	exit_status = 258;
+}
+
 int	check_sep(char *sep)
 {
+	int	i;
+	i = 1;
 	if (sep[0] == '<')
+	{
 		if (!(ft_strcmp(sep, "<") || ft_strcmp(sep, "<<")))
 		{
-			error_m(2); //error 메세지 설정해야됨
+			while (sep[i] == '<' && i < 2)
+				++i;
+			if (sep[i + 1] == 0)
+				error_m1(ft_substr(&sep[i], 0, 1));
+			else
+				error_m1(ft_substr(&sep[i], 0, 2));
+			// error_m(2);
 			return (0);
 		}
-	if (sep[0] == '>')
+	}
+	else if (sep[0] == '>')
+	{
 		if (!(ft_strcmp(sep, ">") || ft_strcmp(sep, ">>")))
 		{
-			error_m(3); //error 메세지 설정해야됨 
+			while (sep[i] == '>' && i < 2)
+				++i;
+			if (sep[i + 1] == 0)
+				error_m1(ft_substr(&sep[i], 0, 1));
+			else
+				error_m1(ft_substr(&sep[i], 0, 2));
+			// error_m(3); 
 			return (0);
 		}
+	}
 	return (1);
 }
 
@@ -253,7 +289,11 @@ int	get_operator(char *command, int i, t_list **cmds, int *flag)
 		start = i;
 		if (*flag == 1)
 		{
-			error_m(0); // 무슨 에런지 모르겠음 
+			if (!command[i + 1] || command[i + 1] != command[i])
+				error_m1(ft_substr(&command[i], 0, 1));
+			else
+				error_m1(ft_substr(&command[i], 0, 2));
+			// error_m(7);
 			return (-1);
 		}
 		ret = find_sep(command, start, i, cmds);
@@ -279,12 +319,10 @@ t_list	*split_command(char *command)
 {
 	t_list	*cmds;
 	int		i;
-	int		start;
 	int		flag;
 
 	cmds = 0;
 	i = 0;
-	start = -1;
 	flag = 0;
 	while (command[i])
 	{
@@ -941,6 +979,16 @@ void	print_info(t_info *info)
 	}
 }
 
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	exit_status = 1;
+}
+
 int	main(int argc, char *argv[], char **env)
 {
 	t_env		*env_lst;
@@ -952,6 +1000,8 @@ int	main(int argc, char *argv[], char **env)
 	init(argc, argv, env, &env_lst);
 	while (1)
 	{
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		command = read_command();
 		if (command == NULL)
 			continue ;
@@ -961,6 +1011,7 @@ int	main(int argc, char *argv[], char **env)
 		// print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
+		signal(SIGINT, sigint_handler);
 		if (info->process_num == 1)
 		{
 			int		stdin_dup;

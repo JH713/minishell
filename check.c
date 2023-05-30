@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/18 00:51:19 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/26 20:28:43 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,16 @@ char	*execute_check(char *command, char **path)
 		return (ft_strdup(command));
 	}
 	i = 0;
-	while (path[i])
+	if (path)
 	{
-		full_path = ft_strjoin(path[i], command);
-		if (access(full_path, X_OK) == 0)
-			return (full_path);
-		free(full_path);
-		++i;
+		while (path[i])
+		{
+			full_path = ft_strjoin(path[i], command);
+			if (access(full_path, X_OK) == 0)
+				return (full_path);
+			free(full_path);
+			++i;
+		}
 	}
 	minishell_error(command, "command not found", 127);
 	return (NULL);

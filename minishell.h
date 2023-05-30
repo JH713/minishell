@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/20 21:24:44 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/30 23:30:44 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct s_process
 	int		fd[2];
 }	t_process;
 
-int	check_num(char *num);
+int		check_num(char *num);
 void	init(int argc, char *argv[], char **env, t_env **env_lst);
 void	get_env_lst(t_env **env_lst, char **env);
 int		get_first_idx(char *str, char c);
@@ -82,7 +82,7 @@ char	*get_env_str(t_env *env_lst);
 char	**env_lst_to_arr(t_env *env_lst);
 void	env_lstdelone(t_env *lst);
 t_env	*get_lst_by_key(t_env *env_lst, char *key);
-void	env_lst_unset(t_env **env_lst, char **str);
+int		env_lst_unset(t_env **env_lst, char **str);
 void	create_pipe(t_process *process, int process_cnt);
 void	close_unused_pipes(int i, int process_num, t_process *process);
 int		unlink_heredocs(t_info *comm_info);
@@ -93,5 +93,8 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst);
 void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst);
 int		exec_single_builtin(t_info *info, t_env **env_lst);
 int		builtin_func(t_info *info, char **command, t_env **env_lst);
+int		check_env_name(char *str);
+void	minishell_argstr_error(char *command, char *arg, char *err_msg, int exit_num);
+
 
 #endif

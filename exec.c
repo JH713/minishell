@@ -6,11 +6,13 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/24 00:59:21 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/30 21:02:18 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int exit_status;
 
 void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 {
@@ -19,6 +21,8 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 	char	**command;
 	char	*full_path;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	path = get_path(*env_lst);
 	close_unused_pipes(i, info->process_num, proc);
 	redirect_process(proc, info, i);
@@ -43,6 +47,7 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 	i = 0;
 	while (i < info -> process_num)
 	{
+		signal(SIGINT, SIG_IGN);
 		proc[i].pid = fork();
 		if (proc[i].pid == -1)
 			print_error("fork", 0);
@@ -59,6 +64,7 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 		}
 		++i;
 	}
+	close(proc[info ->process_num - 2].fd[0]);
 }
 
 int	check_builtin(char **command)
