@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/31 00:12:53 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/01 00:26:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	hd_sigint_handler(int sig)
 	exit(2);
 }
 
-static int	heredoc_input(t_redirect *input, t_info *info, int j)
+static int	hd_input(t_redirect *input, t_info *info, int j)
 {
 	char		*tempfile;
 	int			fd;
@@ -103,7 +103,7 @@ static int	heredoc_input(t_redirect *input, t_info *info, int j)
 	return (1);
 }
 
-static int	heredoc_input_expand(t_redirect *input, t_env *env, t_info *info, int j)
+static int	hd_input_expand(t_redirect *input, t_env *env, t_info *info, int j)
 {
 	char		*tempfile;
 	int			fd;
@@ -186,9 +186,9 @@ int	create_heredoc_temp(t_info *info, t_env *env_lst)
 		while (input)
 		{
 			if (input->type == 1)
-				ret = heredoc_input_expand(input, env_lst, info, j);
+				ret = hd_input_expand(input, env_lst, info, j);
 			if (input->type == 2)
-				ret = heredoc_input(input, info, j);
+				ret = hd_input(input, info, j);
 			if (ret == 0)
 				return (unlink_heredocs(info));
 			input = input->next;

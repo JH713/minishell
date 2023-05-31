@@ -3,113 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/31 23:15:55 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/01 00:20:18 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	exit_status;
-
-int check_consecutive_pipes(char *str)
-{
-	int	i;
-
-	if (str == NULL)
-		return (0);
-	i = ft_strlen(str) - 1;
-	while (i >= 0 && str[i] == ' ')
-		--i;
-	if (i < 0 || str[i] != '|')
-		return (0);
-	--i;
-	while (i >= 0 && str[i] == ' ')
-		--i;
-	if (i < 0 || str[i] != '|')
-		return (0);
-	return (1);
-}
-
-char last_char_without_whitespace(char *str)
-{
-	int	i;
-
-	if (str == NULL)
-		return (0);
-	i = ft_strlen(str) - 1;
-	while (i >= 0 && str[i] == ' ')
-		--i;
-	if (i < 0)
-		return (0);
-	return (str[i]);
-}
-
-char	*read_command(void)
-{
-	char	*command;
-	char	*add;
-	char	*temp;
-	int		i;
-
-	if (exit_status == 2)
-	{
-		exit_status = 130;
-		printf("\n");
-	}
-	else if (exit_status == 3)
-	{
-		exit_status = 131;
-		printf("Quit: 3\n");
-	}
-	command = readline("minishell$ ");
-	if (command == NULL)
-	{
-		ft_putstr_fd("\x1b[1A", 1);
-		ft_putstr_fd("\033[11C", 1);
-		write(1, "exit\n", 5);
-		exit(0);
-	}
-	if (ft_strlen(command) == 0)
-	{
-		free(command);
-		return (NULL);
-	}
-	i = 0;
-	while (command[i] == ' ')
-		++i;
-	if (command[i] == 0)
-	{
-		add_history(command);
-		free(command);
-		return (NULL);
-	}
-	if (command[i] == '|')
-	{
-		add_history(command);
-		return (command);
-	}
-	while (last_char_without_whitespace(command) == '|')
-	{
-		if (check_consecutive_pipes(command))
-		{
-			add_history(command);
-			return (command);
-		}
-		add = readline("> ");
-		temp = command;
-		command = ft_strjoin(command, " ");
-		free(temp);
-		temp = command;
-		command = ft_strjoin(command, add);
-		free(temp);
-		free(add);
-	}
-	add_history(command);
-	return (command);
-}
 
 void	add_list(char *str, t_list **cmds)
 {
@@ -221,7 +124,6 @@ int check_sep_output(char *sep, int i)
 		error_m1(ft_substr(&sep[i], 0, 2));
 	return (0);
 }
-
 
 int	check_sep(char *sep)
 {
@@ -999,49 +901,6 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	return (info);
 }
 
-
-void	print_info(t_info *info)
-{
-	ft_printf("process_num = %d\n", info->process_num);
-	ft_printf("heredoc_num = %d\n", info->heredoc_num);
-
-	int i = 0;
-	int j;
-	t_command *command;
-	t_redirect *input;
-	t_redirect *output;
-	while (i < info->process_num)
-	{
-		ft_printf("commands %d\n", i);
-		j = 0;
-		command = &(info->commands[i]);
-		input = command->input;
-		output = command->output;
-		while (command->command[j])
-		{
-			ft_printf("%s\n", command->command[j]);
-			j++;
-		}
-		while (input)
-		{
-			ft_printf("input\n");
-			ft_printf("type: %d\n", input->type);
-			ft_printf("fd: %s\n", input->fd);
-			ft_printf("file: %s\n", input->file);
-			input = input->next;
-		}
-		while (output)
-		{
-			ft_printf("output\n");
-			ft_printf("type: %d\n", output->type);
-			ft_printf("fd: %s\n", output->fd);
-			ft_printf("file: %s\n", output->file);
-			output = output->next;
-		}
-		++i;
-	}
-}
-
 static void	sigint_handler(int sig)
 {
 	(void)sig;
@@ -1070,8 +929,7 @@ int	main(int argc, char *argv[], char **env)
 			continue ;
 		info = parse_command(command, env_lst);
 		if (info == NULL)
-			continue ; 
-		// print_info(info);
+			continue ;
 		if (create_heredoc_temp(info, env_lst) == 0)
 			continue ;
 		signal(SIGINT, sigint_handler);
@@ -1079,16 +937,20 @@ int	main(int argc, char *argv[], char **env)
 		{
 			int		stdin_dup;
 			int		stdout_dup;
+			int		stderr_dup;
 			stdin_dup = dup(0);
 			stdout_dup = dup(1);
+			stderr_dup = dup(2);
 			ret = exec_single_builtin(info, &env_lst);
 			if (ret == 1)
 			{
 				unlink_heredocs(info);
 				dup2(stdin_dup, 0);
 				dup2(stdout_dup, 1);
+				dup2(stderr_dup, 2);
 				close(stdin_dup);
 				close(stdout_dup);
+				close(stderr_dup);
 				exit_status = 0;
 				continue ;
 			}
@@ -1097,8 +959,10 @@ int	main(int argc, char *argv[], char **env)
 				unlink_heredocs(info);
 				dup2(stdin_dup, 0);
 				dup2(stdout_dup, 1);
+				dup2(stderr_dup, 2);
 				close(stdin_dup);
 				close(stdout_dup);
+				close(stderr_dup);
 				continue ;
 			}
 		}

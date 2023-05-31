@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/30 23:30:44 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/01 00:17:36 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_process
 	int		fd[2];
 }	t_process;
 
+char	*read_command(void);
 int		check_num(char *num);
 void	init(int argc, char *argv[], char **env, t_env **env_lst);
 void	get_env_lst(t_env **env_lst, char **env);
@@ -95,6 +96,5 @@ int		exec_single_builtin(t_info *info, t_env **env_lst);
 int		builtin_func(t_info *info, char **command, t_env **env_lst);
 int		check_env_name(char *str);
 void	minishell_argstr_error(char *command, char *arg, char *err_msg, int exit_num);
-
 
 #endif
