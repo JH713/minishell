@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/30 21:02:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:58:14 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 	unsigned char exit_num;
 
 	command = info->commands[0].command;
+	if (command[0] == NULL)
+		return (0);
 	if (!check_builtin(command))
 		return (0);
 	redirect_process(NULL, info, 0);

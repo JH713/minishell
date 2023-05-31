@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/30 23:47:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/05/31 23:15:55 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*read_command(void)
 		}
 		add = readline("> ");
 		temp = command;
-		command= ft_strjoin(command, " ");
+		command = ft_strjoin(command, " ");
 		free(temp);
 		temp = command;
 		command = ft_strjoin(command, add);
@@ -200,37 +200,43 @@ void	error_m1(char *str)
 	exit_status = 258;
 }
 
+int check_sep_input(char *sep, int i)
+{
+	while (sep[i] == '<' && i < 2)
+		++i;
+	if (sep[i + 1] == 0)
+		error_m1(ft_substr(&sep[i], 0, 1));
+	else
+		error_m1(ft_substr(&sep[i], 0, 2));
+	return (0);
+}
+
+int check_sep_output(char *sep, int i)
+{
+	while (sep[i] == '>' && i < 2)
+		++i;
+	if (sep[i + 1] == 0)
+		error_m1(ft_substr(&sep[i], 0, 1));
+	else
+		error_m1(ft_substr(&sep[i], 0, 2));
+	return (0);
+}
+
+
 int	check_sep(char *sep)
 {
 	int	i;
+
 	i = 1;
 	if (sep[0] == '<')
 	{
 		if (!(ft_strcmp(sep, "<") || ft_strcmp(sep, "<<")))
-		{
-			while (sep[i] == '<' && i < 2)
-				++i;
-			if (sep[i + 1] == 0)
-				error_m1(ft_substr(&sep[i], 0, 1));
-			else
-				error_m1(ft_substr(&sep[i], 0, 2));
-			// error_m(2);
-			return (0);
-		}
+			return (check_sep_input(sep, i));
 	}
 	else if (sep[0] == '>')
 	{
 		if (!(ft_strcmp(sep, ">") || ft_strcmp(sep, ">>")))
-		{
-			while (sep[i] == '>' && i < 2)
-				++i;
-			if (sep[i + 1] == 0)
-				error_m1(ft_substr(&sep[i], 0, 1));
-			else
-				error_m1(ft_substr(&sep[i], 0, 2));
-			// error_m(3); 
-			return (0);
-		}
+			return (check_sep_output(sep, i));
 	}
 	return (1);
 }
@@ -278,24 +284,26 @@ int	get_word(char *command, int i, t_list **cmds, int *flag)
 	return (i);
 }
 
+int handle_consecutive_redirection_error(char *command, int i)
+{
+	if (!command[i + 1] || command[i + 1] != command[i])
+		error_m1(ft_substr(&command[i], 0, 1));
+	else
+		error_m1(ft_substr(&command[i], 0, 2));
+	return (-1);
+}
+
 int	get_operator(char *command, int i, t_list **cmds, int *flag)
 {
 	int	start;
 	int	ret;
 
-	start = i;
+	//start = i;
 	if (command[i] && (command[i] == '<' || command[i] == '>'))
 	{
 		start = i;
 		if (*flag == 1)
-		{
-			if (!command[i + 1] || command[i + 1] != command[i])
-				error_m1(ft_substr(&command[i], 0, 1));
-			else
-				error_m1(ft_substr(&command[i], 0, 2));
-			// error_m(7);
-			return (-1);
-		}
+			return (handle_consecutive_redirection_error(command, i));
 		ret = find_sep(command, start, i, cmds);
 		if (ret == -1)
 			return (-1);
@@ -442,38 +450,47 @@ int	check_type(char	*content)
 	return (1);
 }
 
-void	check_input(t_info *info, t_list *list, t_command *command, char *file)
+void	check_input(t_info *info, t_list *list, char **fd, int *type)
 {
-	int			i;
-	char		*fd;
-	int			n;
-	int			type;
-	t_redirect	*new;
+	int		i;
+	int		n;
+	char	*content;
 
-	char *content = list->content;
+	content = list->content;
 	i = 0;
 	n = 0;
 	while (ft_isdigit(content[i]))
 		i++;
 	if (i != 0)
-		fd = ft_substr(content, 0, i);
+		*fd = ft_substr(content, 0, i);
 	else
-		fd = 0;
+		*fd = 0;
 	while (content[i++] == '<')
 		n++;
 	if (n == 1)
-		type = 0;
+		*type = 0;
 	else
 	{
 		info->heredoc_num++;
-		type = check_type(list -> next -> content);
+		*type = check_type(list -> next -> content);
 	}
-	//ft_printf("%d %s %s\n",type, fd, file);
+}
+
+
+void	put_input(t_info *info, t_list *list, t_command *command, char *file)
+{
+	// int			i;
+	char		*fd;
+	// int			n;
+	int			type;
+	t_redirect	*new;
+
+	check_input(info, list, &fd, &type);
 	new = malloc_redirect(type, fd, file);
 	add_last(&(command -> input), new);
 }
 
-void	check_output(t_info *info, char *content, t_command *command,char *file)
+void	put_output(t_info *info, char *content, t_command *command,char *file)
 {
 	int			i;
 	char		*fd;
@@ -506,16 +523,11 @@ void	init_command(t_command *command, int num)
 {
 	command -> input = 0;
 	command -> output = 0;
-	// if (num != 0)
-	// {
-		command->command =(char **)malloc(sizeof(char *) * (num + 1));
-		if (!command->command)
-			exit(1);
-			//널가드 
-		(command ->command)[num] = 0;
-	// }
-	// else
-	// 	command -> command = 0;
+
+	command->command = (char **)malloc(sizeof(char *) * (num + 1));
+	if (!command->command)
+		exit(1);
+	(command ->command)[num] = 0;
 }
 
 extern int exit_status;
@@ -549,100 +561,139 @@ int	check_prev_quotes(char *line, int i)
 			return (1);
 		i--;
 	}
-	return 0;
+	return (0);
+}
+
+void handle_variable_expansion(char **line, int flag, int *i, int *j)
+{
+	*j = 1;
+	if (flag == 1)
+	{
+		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\" $") == 0)
+		{
+			if ((*line)[*i + *j] == '\'')
+			{
+				if (check_prev_quotes((*line), *i + *j))
+					break ;
+			}
+			else
+				*j += 1;
+		}
+	}
+	else
+	{
+		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\"\' $") == 0)
+			*j += 1;
+	}
+}
+
+void handle_exit_status_variable(char **line, int *i, char **env_value)
+{
+	*env_value = ft_itoa(exit_status);
+	join_env_2(line, *env_value, *i, *i + 2);
+	*i += ft_strlen(*env_value);
+}
+
+void	get_environment_variable_value(char *line, t_env *env_lst, char **env_value, int j)
+{
+	t_env	*lst;
+	char	*env_key;
+
+	env_key = ft_substr(line, 0, j - 1);
+	lst = get_lst_by_key(env_lst, env_key);
+	if (lst == NULL)
+		*env_value = "";
+	else
+		*env_value = lst->value;
 }
 
 int	expand_env_inner(char **line, t_env *env_lst, int *i, int flag)
 {
-	char	*env_key;
 	char	*env_value;
-	t_env	*lst;
 	int		j;
 
 	if ((*line)[*i] == '$' && (*line)[*i + 1] == '?')
-	{
-		env_value = ft_itoa(exit_status);
-		join_env_2(line, env_value, *i, *i + 2);
-		*i += ft_strlen(env_value);
-	}
+		handle_exit_status_variable(line, i, &env_value);
 	else if ((*line)[*i] == '$')
 	{
-		j = 1;
-		if (flag == 1)
-		{
-			while ((*line)[*i + j] && ft_inset((*line)[*i + j], "\" $") == 0)
-			{
-				if ((*line)[*i + j] == '\'')
-				{
-					if (check_prev_quotes((*line), *i + j))
-						break ;
-				}
-				else
-					j++;
-			}
-		}
-		else
-		{
-			while ((*line)[*i + j] && ft_inset((*line)[*i + j], "\"\' $") == 0)
-				j++;
-		}
+		handle_variable_expansion(line, flag, i, &j);
 		if (j == 1)
 		{
 			++*i;
-			return 0;
+			return (0);
 		}
-		env_key = ft_substr(&(*line)[*i + 1], 0, j - 1);
-		lst = get_lst_by_key(env_lst, env_key);
-		if (lst == NULL)
-			env_value = "";
-		else
-			env_value = lst->value;
+		get_environment_variable_value(&(*line)[*i + 1], env_lst, &env_value, j);
 		join_env_2(line, env_value, *i, *i + j);
 		*i += ft_strlen(env_value);
 	}
 	else
 	{
-			++*i;
-			return 0;
+		++*i;
+		return (0);
 	}
 	return (ft_strlen(env_value));
 }
 
+void	check_quotes_env(char **line, t_env *env_lst, int *i)
+{
+	int		end;
+	int		ret;
+
+	if ((*line)[*i] == '"')
+	{
+		ret = check_end(*line, *i, '"');
+		end = *i + ret;
+		if (ret == 0)
+		{
+			while (*i <= end)
+			end += expand_env_inner(line, env_lst, i, 0);
+		}
+		else
+		{
+			while (*i <= end)
+				end += expand_env_inner(line, env_lst, i, 1);
+		}
+	}
+	else if ((*line)[*i] == '\'')
+		*i = *i + check_end(*line, *i, '\'') + 1;
+	else
+		expand_env_inner(line, env_lst, i, 0);
+}
+
+
 void	expand_env_2(char **line, t_env *env_lst)
 {
 	int		i;
-	int		end;
-	int		ret;
+	// int		end;
+	// int		ret;
 
 	i = 0;
 	if (*line == NULL)
 		return ;
 	while ((*line)[i])
+		check_quotes_env(line, env_lst, &i);
+}
+
+void	check_quotes_in_cmd(char *content, char **temp, int *i, int *j)
+{
+	char	quotes;
+
+	quotes = content[*i];
+	if (check_if_pair(content + *i, quotes))
 	{
-		if ((*line)[i] == '"')
+		(*i)++;
+		while (1)
 		{
-			ret = check_end(*line, i, '"');
-			end = i + ret;
-			if (ret == 0)
+			if (content[*i] == quotes)
 			{
-				while (i <= end)
-					end += expand_env_inner(line, env_lst, &i, 0);
+				(*i)++;
+				break ;
 			}
-			else
-			{
-				while (i <= end)
-				{
-					end += expand_env_inner(line, env_lst, &i, 1);
-					// printf("%s\n", *line);
-					// printf("%d  len:%zu\n", i, ft_strlen(*line));
-				}
-			}
+			(*temp)[(*j)++] = content[(*i)++];
 		}
-		else if ((*line)[i] == '\'')
-			i = i + check_end(*line, i, '\'') + 1;
-		else
-			expand_env_inner(line, env_lst, &i, 0);
 	}
+	else
+		(*temp)[(*j)++] = content[(*i)++];
 }
 
 char	*check_cmd(char	*content, t_env *env_lst)
@@ -650,41 +701,20 @@ char	*check_cmd(char	*content, t_env *env_lst)
 	char	*temp;
 	int		i;
 	int		j;
-	char	quotes;
 
 	if (ft_strchr(content, '$'))
 		expand_env_2(&content, env_lst);
 	temp = (char *)malloc(sizeof(char) * (ft_strlen(content)+1));
-	//printf("%zu\n", ft_strlen(content));
+	if (!temp)
+		exit(1);
 	i = 0;
 	j = 0;
-	//printf("content : %s\n", content);
 	while (content[i])
 	{
 		if (content[i] == '"' || content[i] == '\'')
-		{
-			quotes = content[i];
-			if (check_if_pair(content + i, quotes))
-			{
-				i++;
-				while (1)
-				{
-					if (content[i] == quotes)
-					{
-						i++;
-						break ;
-					}
-					temp[j++] = content[i++];
-				}
-			}
-			else
-				temp[j++] = content[i++];
-		}
+			check_quotes_in_cmd(content, &temp, &i, &j);
 		else
-		{
 			temp[j++] = content[i++];
-			
-		}
 	}
 	temp[j] = 0;
 	return (temp);
@@ -711,10 +741,59 @@ int	count_whitespaces(char *str)
 	return (cnt);
 }
 
+void	count_if_quotes(char **temp, int *i)
+{
+	int	j;
+
+	if ((*temp)[*i] == '"')
+	{
+		j = *i;
+		++(*i);
+		while ((*temp)[*i] && (*temp)[*i] != '"')
+			++(*i);
+		if ((*temp)[*i] == 0)
+			*i = j;
+	}
+	else if ((*temp)[*i] == '\'')
+	{
+		j = *i;
+		++(*i);
+		while ((*temp)[*i] && (*temp)[*i] != '\'')
+			++(*i);
+		if ((*temp)[*i] == 0)
+			*i = j;
+	}
+}
+
+
+int	count_words(char *temp, int i)
+{
+	int		cnt;
+
+	cnt = 1;
+	while (temp[i] == ' ')
+		++i;
+	while (temp[i])
+	{
+		if (temp[i] == '"' || temp[i] == '\'')
+			count_if_quotes(&temp, &i);
+		else if (temp[i] == ' ')
+		{
+			++cnt;
+			while (temp[i] == ' ')
+				++i;
+			continue ;
+		}
+		++i;
+	}
+	free(temp);
+	return (cnt);
+}
+
 int count_word_with_expand(char *content, t_env *env_lst)
 {
-	int		i;
-	int		cnt;
+	//int		i;
+	//int		cnt;
 	int		j;
 	// char	*env_key;
 	// char	*env_value;
@@ -735,41 +814,7 @@ int count_word_with_expand(char *content, t_env *env_lst)
 	}
 	else
 		temp[j + 1] = 0;
-	cnt = 1;
-	i = 0;
-	while (temp[i] == ' ')
-		++i;
-	while (temp[i])
-	{
-		if (temp[i] == '"')
-		{
-			j = i;
-			++i;
-			while (temp[i] && temp[i] != '"')
-				++i;
-			if (temp[i] == 0)
-				i = j;
-		}
-		else if (temp[i] == '\'')
-		{
-			j = i;
-			++i;
-			while (temp[i] && temp[i] != '\'')
-				++i;
-			if (temp[i] == 0)
-				i = j;
-		}
-		else if (temp[i] == ' ')
-		{
-			++cnt;
-			while (temp[i] == ' ')
-				++i;
-			continue ;
-		}
-		++i;
-	}
-	free(temp);
-	return (cnt);
+	return (count_words(temp, 0));
 }
 
 int	check_word_num(t_list *list, t_env *env_lst)
@@ -801,11 +846,8 @@ int	check_word_num(t_list *list, t_env *env_lst)
 	return (num);
 }
 
-size_t	get_word_len(char *str)
+size_t	get_word_len(char *str, size_t len, size_t temp)
 {
-	size_t	len;
-	size_t	temp;
-	len = 0;
 	while (str[len])
 	{
 		if (str[len] == '"')
@@ -849,7 +891,7 @@ char **split_word(char *str, int num)
 	{
 		while (str[j] == ' ')
 			j++;
-		word_len = get_word_len(&str[j]);
+		word_len = get_word_len(&str[j], 0, 0);
 		str_arr[i] = ft_substr(str, j, word_len);
 		// ft_printf("%s\n", str_arr[i]);
 		j += word_len;
@@ -859,6 +901,44 @@ char **split_word(char *str, int num)
 	return (str_arr);
 }
 
+void expand_and_split_env_vars(t_command *command, char *content, t_env *env_lst, int *j)
+{
+	char	*temp;
+	int		temp_num;
+	char	**temp_arr;
+	int		i;
+
+	temp_num = count_word_with_expand(content, env_lst);
+	temp = content;
+	expand_env_2(&temp, env_lst);
+	temp_arr = split_word(temp, temp_num);
+	free(temp);
+	i = 0;
+	while (temp_arr[i])
+	{
+		(command->command)[(*j)++] = ft_strdup(check_cmd(temp_arr[i], env_lst));
+		++i;
+	}
+	free(temp_arr);
+}
+
+// void	if_command_is_redirection(char *content, )
+// {
+// 	char	*file;
+// 	if (content[len - 1] == '<')
+// 	{
+// 		file = check_cmd(list -> next -> content, env_lst);
+// 		put_input(info, list, command, file);
+// 		list = list -> next;
+// 	}
+// 	else if (content[len - 1] == '>')
+// 	{
+// 		list = list -> next;
+// 		file = check_cmd(list -> content, env_lst);
+// 		put_output(info, content, command, file);
+// 	}
+// }
+
 t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_lst)
 {
 	int		len;
@@ -866,9 +946,6 @@ t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_l
 	char	*file;
 	int		num;
 	int		j;
-	char	*temp;
-	int	temp_num;
-	char **temp_arr;
 
 	if (((char *)list->content)[0] == '|')
 		list = list->next;
@@ -881,32 +958,18 @@ t_list	*put_command(t_info *info, t_command *command, t_list *list, t_env *env_l
 		len = ft_strlen(content);
 		if (content[len - 1] == '<')
 		{
-				file = check_cmd(list -> next -> content, env_lst);
-				check_input(info, list, command, file);
-				list = list -> next;
+			file = check_cmd(list -> next -> content, env_lst);
+			put_input(info, list, command, file);
+			list = list -> next;
 		}
 		else if (content[len - 1] == '>')
 		{
-				list = list -> next;
-				file = check_cmd(list -> content, env_lst);
-				check_output(info, content, command, file);
+			list = list -> next;
+			file = check_cmd(list -> content, env_lst);
+			put_output(info, content, command, file);
 		}
 		else //환경변수 확장한 것 split해서 가져온 후 command에 넣어줌 
-		{
-			temp_num = count_word_with_expand(content, env_lst);
-			temp = content;
-			expand_env_2(&temp, env_lst);
-			temp_arr = split_word(temp, temp_num);
-			free(temp);
-			int i = 0;
-			while (temp_arr[i])
-			{
-				(command->command)[j++] = ft_strdup(check_cmd(temp_arr[i], env_lst));
-				++i;
-			}
-			free(temp_arr);
-			//(command->command)[j++] = ft_strdup(check_cmd(content, env_lst));
-		}
+			expand_and_split_env_vars(command, content, env_lst, &j);
 		list = list -> next;
 	}
 	return (list);
