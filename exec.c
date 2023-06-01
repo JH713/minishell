@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/31 16:58:14 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/01 20:52:00 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
 			exit_num = (unsigned char)ft_atoi(command[1]);
 		}
-		unlink_heredocs(info);
+		system("leaks minishell");
 		exit(exit_num);
 	}
 	return (builtin_func(info, command, env_lst));

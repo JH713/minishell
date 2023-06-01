@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/30 18:16:57 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/01 20:58:33 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,18 @@ int check_env_name(char *str)
 	return (1);
 }
 
+void    free_env_arr(char **env)
+{
+    int i;
+    i = 0;
+    while (env[i])
+    {
+        free(env[i]);
+        ++i;
+    }
+    free(env);
+}
+
 int	builtin_func(t_info *info, char **command, t_env **env_lst)
 {
 	char	**env;
@@ -230,6 +242,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			if (export_env(env_lst, &command[1]) == 0)
 				return (-1);
 		}
+		free_env_arr(env);
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "unset", 6) == 0) // 환경변수 이름에 알파벳이랑 _만 들어가도록
@@ -241,6 +254,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			if (env_lst_unset(env_lst, &command[1]) == 0)
 				return (-1);
 		}
+		free_env_arr(env);
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "pwd", 4) == 0)
@@ -250,6 +264,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		char	*buf = NULL;
 		buf = getcwd(buf, 0);
 		ft_printf("%s\n", buf);
+		free_env_arr(env);
 		free(buf);
 		return (1);
 	}
@@ -263,6 +278,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			if (lst == NULL)
 			{
 				ft_putendl_fd("minishell: cd: HOME path not found", 2);
+		free_env_arr(env);
 				exit_status = 1;
 				return (1);
 			}
@@ -285,6 +301,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			ft_putstr_fd("minishell: ", 2);
 			perror("cd");
 		}
+		free_env_arr(env);
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "echo", 5) == 0)
@@ -322,6 +339,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		}
 		else
 			ft_printf("\n");
+		free_env_arr(env);
 		return (1);
 	}
 	return (0);
