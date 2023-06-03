@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 00:26:57 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/01 22:25:24 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static int	hd_input(t_redirect *input, t_info *info, int j)
 			if (line == NULL)
 				exit(0);
 		}
+		exit(0);
 	}
 	int status;
 	int	stat;
@@ -131,6 +132,7 @@ static int	hd_input_expand(t_redirect *input, t_env *env, t_info *info, int j)
 			if (line == NULL)
 				exit(0);
 		}
+		exit(0);
 	}
 	int status;
 	int	stat;

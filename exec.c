@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 20:52:00 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:58:14 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 		}
 		++i;
 	}
-	close(proc[info ->process_num - 2].fd[0]);
+	if (info->process_num >= 2)
+		close(proc[info ->process_num - 2].fd[0]);
 }
 
 int	check_builtin(char **command)
@@ -151,7 +152,9 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
 			exit_num = (unsigned char)ft_atoi(command[1]);
 		}
-		system("leaks minishell");
+		else
+			unlink_heredocs(info);
+		// system("leaks minishell");
 		exit(exit_num);
 	}
 	return (builtin_func(info, command, env_lst));
