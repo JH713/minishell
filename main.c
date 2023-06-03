@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 17:58:25 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:33:14 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -842,6 +842,7 @@ t_info	*parse_command(char *command, t_env *env_lst)
 
 	i = 0;
 	list = split_command(command);
+	
 	if (list == NULL) //syntax error 시 return NULL;
 		return (NULL);
 	temp = list;
@@ -851,6 +852,8 @@ t_info	*parse_command(char *command, t_env *env_lst)
 		return (NULL); //list 다 free해줘야함 
 	}
 	info = malloc(sizeof(t_info));
+	if(!info)
+		exit(1);
 	info->heredoc_num = 0;
 	info->process_num = pipe_num(list) + 1;
 	info->commands = (t_command *)malloc(sizeof(t_command) * info->process_num);
@@ -860,13 +863,14 @@ t_info	*parse_command(char *command, t_env *env_lst)
 		i++;
 	}
 	//list free?
-	// while(temp)
+	// while(temp)   
 	// {
 	// 	temp2 = temp -> next;
 	// 	free(temp);
 	// 	temp = temp2;
 	// }
 	ft_lstclear(&temp, free);
+	
 	return (info);
 }
 
@@ -995,7 +999,7 @@ int	main(int argc, char *argv[], char **env)
 	t_process	*process;
 	int			ret;
 
-	atexit(leaks);
+	// atexit(leaks);
 	init(argc, argv, env, &env_lst);
 	while (1)
 	{

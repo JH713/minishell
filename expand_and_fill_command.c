@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:31:12 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/01 19:20:25 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:31:40 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ void	expand_and_fill_command(t_command *command, \
 		(command->command)[(*j)++] = ft_strdup(check_cmd(temp_arr[i], env_lst));
 		++i;
 	}
+	i = -1;
+	while (temp_arr[++i])
+		free(temp_arr[i]);
 	free(temp_arr);
 }
