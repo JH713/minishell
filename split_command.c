@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:39:04 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 22:51:47 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:58:54 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,19 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 
 int	handle_consecutive_redirection_error(char *command, int i)
 {
+	char *temp;
 	if (!command[i + 1] || command[i + 1] != command[i])
-		error_m1(ft_substr(&command[i], 0, 1));
+	{
+		temp = ft_substr(&command[i], 0, 1);
+		error_m1(temp);
+		free(temp);
+	}
 	else
-		error_m1(ft_substr(&command[i], 0, 2));
+	{
+		temp = ft_substr(&command[i], 0, 2);
+		error_m1(temp);
+		free(temp);
+	}
 	return (-1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sep.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:40:55 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/01 16:40:57 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:00:19 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,42 @@ int	is_not_sep(char c)
 
 int	check_sep_input(char *sep, int i)
 {
+	char *temp;
 	while (sep[i] == '<' && i < 2)
 		++i;
 	if (sep[i + 1] == 0)
-		error_m1(ft_substr(&sep[i], 0, 1));
+	{
+		temp = ft_substr(&sep[i], 0, 1);
+		error_m1(temp);
+		free(temp);
+	}
 	else
-		error_m1(ft_substr(&sep[i], 0, 2));
+	{
+		temp = ft_substr(&sep[i], 0, 2);
+		error_m1(temp);
+		free(temp);
+	}
 	return (0);
 }
 
 int	check_sep_output(char *sep, int i)
 {
+	char *temp;
+
 	while (sep[i] == '>' && i < 2)
 		++i;
 	if (sep[i + 1] == 0)
-		error_m1(ft_substr(&sep[i], 0, 1));
+	{
+		temp = ft_substr(&sep[i], 0, 1);
+		error_m1(temp);
+		free(temp);
+	}
 	else
-		error_m1(ft_substr(&sep[i], 0, 2));
+	{
+		temp = ft_substr(&sep[i], 0, 2);
+		error_m1(temp);
+		free(temp);
+	}
 	return (0);
 }
 
