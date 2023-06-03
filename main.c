@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 18:33:14 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:03:08 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -946,6 +946,7 @@ void	free_info_commands(t_info *info)
 		free_redirect((info->commands[i]).output);
 		i++;
 	}
+	free(info->commands);
 }
 
 void	print_info(t_info *info)
@@ -999,12 +1000,15 @@ int	main(int argc, char *argv[], char **env)
 	t_process	*process;
 	int			ret;
 
-	// atexit(leaks);
+	atexit(leaks);
 	init(argc, argv, env, &env_lst);
+	command = NULL;
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
+		if (command)
+			free(command);
 		command = read_command();
 		if (command == NULL)
 			continue ;
@@ -1013,7 +1017,13 @@ int	main(int argc, char *argv[], char **env)
 			continue ;
 		// print_info(info);
 		if (create_heredoc_temp(info, env_lst) == 0)
+		{
+			unlink_heredocs(info);
+			free_info_commands(info);
+			free_heredocs(info);
+			free(info);
 			continue ;
+		}
 		signal(SIGINT, sigint_handler);
 		if (info->process_num == 1)
 		{
@@ -1034,6 +1044,9 @@ int	main(int argc, char *argv[], char **env)
 				close(stdout_dup);
 				close(stderr_dup);
 				exit_status = 0;
+				free_info_commands(info);
+				free_heredocs(info);
+				free(info);
 				continue ;
 			}
 			else if (ret == -1)
@@ -1045,6 +1058,9 @@ int	main(int argc, char *argv[], char **env)
 				close(stdin_dup);
 				close(stdout_dup);
 				close(stderr_dup);
+				free_info_commands(info);
+				free_heredocs(info);
+				free(info);
 				continue ;
 			}
 		}
@@ -1053,8 +1069,8 @@ int	main(int argc, char *argv[], char **env)
 		fork_and_execute(process, info, &env_lst);
 		wait_all_child(info->process_num, process);
 		unlink_heredocs(info);
-		free(command);
 		free_info_commands(info);
 		free_heredocs(info);
+		free(info);
 	}
 }
