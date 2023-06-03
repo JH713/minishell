@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 19:03:08 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:44:17 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -837,7 +837,7 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	t_list	*list;
 	t_info	*info;
 	 t_list	*temp;
-	// t_list	*temp2;
+	//  t_list	*temp2;
 	int		i;
 
 	i = 0;
@@ -866,6 +866,7 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	// while(temp)   
 	// {
 	// 	temp2 = temp -> next;
+	// 	free(temp->content);
 	// 	free(temp);
 	// 	temp = temp2;
 	// }
@@ -1072,5 +1073,6 @@ int	main(int argc, char *argv[], char **env)
 		free_info_commands(info);
 		free_heredocs(info);
 		free(info);
+		free(process);
 	}
 }

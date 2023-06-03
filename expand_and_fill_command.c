@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:31:12 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 18:51:20 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:56:40 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	expand_and_fill_command(t_command *command, \
 	int		i;
 
 	temp_num = count_word_with_expand(content, env_lst);
-	temp = content;
+	temp = ft_strdup(content);
 	expand_env_2(&temp, env_lst);
 	temp_arr = split_word(temp, temp_num);
 	free(temp);
