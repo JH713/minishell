@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:39:04 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 22:58:54 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:25:19 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,14 @@
 // 	return (0);
 // }
 
-
 int	find_sep(char *command, int start, int i, t_list **cmds)
 {
 	char	*sep;
 	t_list	*last;
-	 char	*temp;
+	char	*temp;
 
 	if (check_prev(command, i, *cmds))
 	{
-		// i = join_sep_to_fd(command, start, i,cmds);
-		// if (i == -1)
-		// 	return (-1);
 		while (command[i] && (command[i] == '<' || command[i] == '>'))
 			i++;
 		last = ft_lstlast(*cmds);
@@ -54,6 +50,7 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 		temp = last -> content; //이전꺼 free?
 		last -> content = ft_strjoin(last -> content, sep);
 		free(temp);
+		free(sep);
 	}
 	else
 	{
@@ -67,13 +64,13 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 		}
 		add_list(sep, cmds);
 	}
-	//free(sep);
 	return (i - start);
 }
 
 int	handle_consecutive_redirection_error(char *command, int i)
 {
-	char *temp;
+	char	*temp;
+
 	if (!command[i + 1] || command[i + 1] != command[i])
 	{
 		temp = ft_substr(&command[i], 0, 1);
