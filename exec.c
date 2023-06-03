@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 17:58:14 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:43:15 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 		}
 		else
 			unlink_heredocs(info);
-		// system("leaks minishell");
 		exit(exit_num);
 	}
 	return (builtin_func(info, command, env_lst));

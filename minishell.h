@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 19:24:01 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:02:18 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int			find_sep(char *command, int start, int i, t_list **cmds);
 int			get_word(char *command, int i, t_list **cmds, int *flag);
 int			handle_consecutive_redirection_error(char *command, int i);
 int			get_operator(char *command, int i, t_list **cmds, int *flag);
-t_list		*split_command(char *command);
+t_list		*split_command(char *command, int i, int flag);
 int			check_error(t_list *list);
 int			pipe_num(t_list	*list);
 void		add_last(t_redirect **rd, t_redirect *new);
@@ -116,6 +116,10 @@ t_list		*check_and_init(t_list *list, t_command *command, t_env *env_lst);
 t_list		*put_command(t_info *info, t_command *command, \
 							t_list *list, t_env *env_lst);
 t_info		*parse_command(char *command, t_env *env_lst);
+void		free_info(t_info *info);
+void		free_command(char **command);
+void		free_redirect(t_redirect *rd);
+void    	free_heredocs(t_info *info);
 ////////	////////////////////////////
 int			check_num(char *num);
 void		init(int argc, char *argv[], char **env, t_env **env_lst);

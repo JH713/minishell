@@ -6,27 +6,51 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:39:04 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/01 20:51:21 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:51:47 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// int	join_sep_to_fd(char *command, int start, int i, t_list **cmds)
+// {
+// 	char	*sep;
+// 	t_list	*last;
+// 	char	*temp;
+
+// 	while (command[i] && (command[i] == '<' || command[i] == '>'))
+// 		i++;
+// 	last = ft_lstlast(*cmds);
+// 	sep = ft_substr(command, start, i - start);
+// 	if (!check_sep(sep))
+// 		return (-1);
+// 	temp = last -> content;
+// 	last -> content = ft_strjoin(last -> content, sep);
+// 	free(temp);
+// 	return (0);
+// }
 
 
 int	find_sep(char *command, int start, int i, t_list **cmds)
 {
 	char	*sep;
 	t_list	*last;
-	char	*temp;
+	 char	*temp;
 
 	if (check_prev(command, i, *cmds))
 	{
+		// i = join_sep_to_fd(command, start, i,cmds);
+		// if (i == -1)
+		// 	return (-1);
 		while (command[i] && (command[i] == '<' || command[i] == '>'))
 			i++;
 		last = ft_lstlast(*cmds);
 		sep = ft_substr(command, start, i - start);
 		if (!check_sep(sep))
+		{
+			free(sep);
 			return (-1);
+		}
 		temp = last -> content; //이전꺼 free?
 		last -> content = ft_strjoin(last -> content, sep);
 		free(temp);
@@ -37,9 +61,13 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 				i++;
 		sep = ft_substr(command, start, i - start);
 		if (!check_sep(sep))
+		{
+			free(sep);
 			return (-1);
+		}
 		add_list(sep, cmds);
 	}
+	//free(sep);
 	return (i - start);
 }
 
@@ -97,15 +125,11 @@ int	get_word(char *command, int i, t_list **cmds, int *flag)
 	return (i);
 }
 
-t_list	*split_command(char *command)
+t_list	*split_command(char *command, int i, int flag)
 {
 	t_list	*cmds;
-	int		i;
-	int		flag;
 
 	cmds = 0;
-	i = 0;
-	flag = 0;
 	while (command[i])
 	{
 		if (is_not_sep(command[i]))

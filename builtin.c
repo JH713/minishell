@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 17:35:54 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:18:24 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	export_env(t_env **env_lst, char **env)
 			minishell_argstr_error("unset", env[i], "not a valid identifier", 1);
 			flag = 0;
 			++i;
+			free(key);
 			continue ;
 		}
 		while (curr)
@@ -155,6 +156,7 @@ int	export_env(t_env **env_lst, char **env)
 			env_lst_add_back(env_lst, new);
 		}
 		++i;
+		free(key);
 	}
 	return (flag);
 }
@@ -212,6 +214,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
 	{
 		print_env(env, env_num);
+		free_env_arr(env);
 		return (1);
 	}
 	else if (ft_strncmp(command[0], "export", 7) == 0)

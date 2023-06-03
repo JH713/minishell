@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:21:49 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/01 19:20:54 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:08:56 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	get_environment_variable_value(char *line, \
 
 	env_key = ft_substr(line, 0, j - 1);
 	lst = get_lst_by_key(env_lst, env_key);
+	free(env_key);
 	if (lst == NULL)
 		*env_value = "";
 	else

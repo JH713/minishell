@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:33:32 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 18:50:57 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:58:01 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	check_word_num(t_list *list, t_env *env_lst)
 	temp = list;
 	while (temp && !ft_strcmp(temp->content, "|"))
 	{
-		content = temp -> content;	
+		content = temp -> content;
 		len = ft_strlen(content);
 		if ((content[len - 1] == '<' || content[len - 1] == '>'))
 			flag = 1;
@@ -80,7 +80,7 @@ t_list	*put_command(t_info *info, t_command *command, \
 			list = handle_input_redirection(info, list, env_lst, command);
 		else if (content[len - 1] == '>')
 			list = handle_output_redirection(info, list, env_lst, command);
-		else //환경변수 확장한 것 split해서 가져온 후 command에 넣어줌 
+		else
 			expand_and_fill_command(command, content, env_lst, &j);
 		list = list -> next;
 	}

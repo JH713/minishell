@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:31:12 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 19:56:40 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:56:47 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	expand_and_fill_command(t_command *command, \
 	i = 0;
 	while (temp_arr[i])
 	{
-		(command->command)[(*j)++] = ft_strdup(check_cmd(temp_arr[i], env_lst));
+		(command->command)[(*j)++] = check_cmd(temp_arr[i], env_lst);
 		++i;
 	}
 	i = -1;

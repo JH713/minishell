@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:13:36 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 19:25:40 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:56:54 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ void	join_env_2(char **line, char *env_value, int start, int end)
 
 	temp = *line;
 	if (start == 0)
-		head = NULL;
+		head = ft_strdup("");
 	else
 		head = ft_substr(temp, 0, start);
 	if (end == (int)ft_strlen(temp))
-		tail = NULL;
+		tail = ft_strdup("");
 	else
 		tail = ft_substr(temp, end, ft_strlen(temp) - end);
 	free(temp);
 	temp = ft_strjoin(head, env_value);
+	free(head);
 	*line = ft_strjoin(temp, tail);
+	free(tail);
 	free(temp);
 }
 

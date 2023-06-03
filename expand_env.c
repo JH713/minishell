@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 22:23:07 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/25 05:06:37 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:22:27 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ void	join_env(char **line, char *env_value, int start, int end)
 
 	temp = *line;
 	if (start == 0)
-		head = NULL;
+		head = ft_strdup("");
 	else
 		head = ft_substr(temp, 0, start);
 	if (end == (int)ft_strlen(temp))
-		tail = NULL;
+		tail = ft_strdup("");
 	else
 		tail = ft_substr(temp, end, ft_strlen(temp) - end);
 	free(temp);
 	temp = ft_strjoin(head, env_value);
+	free(head);
 	*line = ft_strjoin(temp, tail);
+	free(tail);
 	free(temp);
 }
 
@@ -66,6 +68,7 @@ void	expand_env(char **line, t_env *env_lst)
 			}
 			env_key = ft_substr(&(*line)[i + 1], 0, j - 1);
 			lst = get_lst_by_key(env_lst, env_key);
+			free(env_key);
 			if (lst == NULL)
 				env_value = "";
 			else
