@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:36:38 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/04 15:55:20 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/05 04:59:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	check_quotes_in_cmd(char *content, char **temp, int *i, int *j)
 	char	quotes;
 
 	quotes = content[*i];
-	if (check_if_pair(content + *i, quotes))
+	if (check_if_pair(content + *i + 1, quotes))
 	{
 		(*i)++;
 		while (1)
@@ -31,7 +31,9 @@ void	check_quotes_in_cmd(char *content, char **temp, int *i, int *j)
 		}
 	}
 	else
+	{
 		(*temp)[(*j)++] = content[(*i)++];
+	}
 }
 
 char	*check_cmd(char	*content, t_env *env_lst)
