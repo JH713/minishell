@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 18:44:56 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/04 23:39:02 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_info
 	int			heredoc_num;
 	char		**heredocs;
 	t_command	*commands;
+	t_env		*env;
 }	t_info;
 
 typedef struct s_process
@@ -136,7 +137,7 @@ void		minishell_arg_error(char *command, char *arg, char *err_msg, int exit_num)
 void		minishell_perror(char *msg, int exit_num);
 void		print_error(char *msg, int status);
 int			unlink_heredocs(t_info *comm_info);
-int			create_heredoc_temp(t_info *info, t_env *env_lst);
+int			create_heredoc_temp(t_info *info);
 void		join_env(char **line, char *env_value, int start, int end);
 void		expand_env(char **line, t_env *env_lst);
 void		redirect_process(t_process *proc, t_info *info, int i);
@@ -159,8 +160,10 @@ int			exec_single_builtin(t_info *info, t_env **env_lst);
 int			builtin_func(t_info *info, char **command, t_env **env_lst);
 int			check_env_name(char *str);
 void		minishell_argstr_error(char *command, char *arg, char *err_msg, int exit_num);
-void	sigint_handler(int sig);
-void	init_in_while(char *command);
-	
-#endif	
-	
+void		sigint_handler(int sig);
+void		init_in_while(char *command);
+void		hd_sigint_handler(int sig);
+char		*get_temp_name(void);
+int			check_builtin(char **command);
+
+#endif

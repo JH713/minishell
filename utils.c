@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:56:21 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/17 21:08:00 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/04 23:15:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,27 @@ char	**get_path(t_env *env_lst)
 		++i;
 	}
 	return (path);
+}
+
+char	*get_temp_name(void)
+{
+	char	*name;
+	char	*num_str;
+	int		num;
+	int		ret;
+
+	num = 1;
+	ret = 0;
+	while (1)
+	{
+		num_str = ft_itoa(num);
+		name = ft_strjoin("/tmp/temp", num_str);
+		free(num_str);
+		ret = access(name, F_OK);
+		if (ret == -1)
+			break ;
+		free(name);
+		num++;
+	}
+	return (name);
 }
