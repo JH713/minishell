@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 22:25:24 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:42:51 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ static char	*get_temp_name(void)
 		num++;
 	}
 	return (name);
-}
-
-static void	sigint_handler(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	exit_status = 1;
 }
 
 static void	hd_sigint_handler(int sig)
@@ -143,7 +133,6 @@ static int	hd_input_expand(t_redirect *input, t_env *env, t_info *info, int j)
 		stat = WTERMSIG(status);
 	else
 		stat = 0;
-	// ft_printf("%d\n", stat);
 	signal(SIGINT, sigint_handler);
 	free(input->file);
 	input->file = tempfile;

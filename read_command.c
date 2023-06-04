@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:16:48 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 22:44:21 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:45:46 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	exit_status;
-
-// static int	check_consecutive_pipes(char *str)
-// {
-// 	int	i;
-
-// 	if (str == NULL)
-// 		return (0);
-// 	i = ft_strlen(str) - 1;
-// 	while (i >= 0 && str[i] == ' ')
-// 		--i;
-// 	if (i < 0 || str[i] != '|')
-// 		return (0);
-// 	--i;
-// 	while (i >= 0 && str[i] == ' ')
-// 		--i;
-// 	if (i < 0 || str[i] != '|')
-// 		return (0);
-// 	return (1);
-// }
 
 static char	last_char_without_whitespace(char *str)
 {
@@ -61,43 +40,10 @@ static void	handle_exit_status(void)
 	}
 }
 
-// static int	handle_last_pipe(char **command)
-// {
-// 	char	*add;
-// 	char	*temp;
-
-// 	if (last_char_without_whitespace(*command) == '|')
-// 	{
-// 		error_m(6);
-
-// 	}
-// 	// while (last_char_without_whitespace(*command) == '|')
-// 	// {
-// 	// 	if (check_consecutive_pipes(*command))
-// 	// 		break ;
-// 	// 	add = readline("> ");
-// 	// 	temp = *command;
-// 	// 	*command = ft_strjoin(*command, " ");
-// 	// 	free(temp);
-// 	// 	temp = *command;
-// 	// 	*command = ft_strjoin(*command, add);
-// 	// 	free(temp);
-// 	// 	free(add);
-// 	// }
-// }
-
-char	*read_command(void)
+static int	is_whitespace_only(char *command)
 {
-	char	*command;
-	int		i;
+	int	i;
 
-	handle_exit_status();
-	command = readline("minishell$ ");
-	if (command == NULL)
-	{
-		ft_putstr_fd("\x1b[1A\033[11Cexit\n", 1);
-		exit(0);
-	}
 	i = 0;
 	while (command[i] == ' ')
 		++i;
@@ -106,18 +52,30 @@ char	*read_command(void)
 		if (i > 0)
 			add_history(command);
 		free(command);
+		return (1);
+	}
+	return (0);
+}
+
+char	*read_command(void)
+{
+	char	*command;
+
+	handle_exit_status();
+	command = readline("minishell$ ");
+	if (command == NULL)
+	{
+		ft_putstr_fd("\x1b[1A\033[11Cexit\n", 1);
+		exit(0);
+	}
+	if (is_whitespace_only(command))
+		return (NULL);
+	add_history(command);
+	if (last_char_without_whitespace(command) == '|')
+	{
+		error_m(6);
+		free(command);
 		return (NULL);
 	}
-	if (command[i] != '|')
-	{
-		if (last_char_without_whitespace(command) == '|')
-		{
-			error_m(6);
-			add_history(command);
-			free(command);
-			return (NULL);
-		}
-	}
-	add_history(command);
 	return (command);
 }

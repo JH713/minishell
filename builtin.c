@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 21:18:24 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:10:01 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,5 +345,6 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		free_env_arr(env);
 		return (1);
 	}
+	free_env_arr(env);
 	return (0);
 }

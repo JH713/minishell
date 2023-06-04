@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 21:43:15 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:11:45 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,16 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 	close_unused_pipes(i, info->process_num, proc);
 	redirect_process(proc, info, i);
 	command = info->commands[i].command;
-	if (command[0] == NULL) //heredoc 삭제해줘야할듯 
+	if (command[0] == NULL)
+	{
+		unlink_heredocs(info);
 		exit(0);
+	}
 	if (builtin_func(info, command, env_lst))
-		exit (0);
+	{
+		unlink_heredocs(info);
+		exit(0);
+	}
 	full_path = execute_check(command[0], path);
 	free(command[0]);
 	command[0] = full_path;

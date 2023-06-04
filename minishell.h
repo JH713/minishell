@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 15:54:00 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:44:56 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-int	exit_status;
+extern int	exit_status;
 
 typedef struct s_env
 {
@@ -123,7 +123,7 @@ void		free_redirect(t_redirect *rd);
 void    	free_heredocs(t_info *info);
 ////////	////////////////////////////
 int			check_num(char *num);
-void		init(int argc, char *argv[], char **env, t_env **env_lst);
+void	init(int argc, char **env, t_env **env_lst, char **command);
 void		get_env_lst(t_env **env_lst, char **env);
 int			get_first_idx(char *str, char c);
 char		**get_path(t_env *env_lst);
@@ -159,6 +159,8 @@ int			exec_single_builtin(t_info *info, t_env **env_lst);
 int			builtin_func(t_info *info, char **command, t_env **env_lst);
 int			check_env_name(char *str);
 void		minishell_argstr_error(char *command, char *arg, char *err_msg, int exit_num);
+void	sigint_handler(int sig);
+void	init_in_while(char *command);
 	
 #endif	
 	
