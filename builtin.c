@@ -6,13 +6,11 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 05:37:15 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 05:46:52 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int exit_status;
 
 void	free_sorted_lst(t_env *sorted_lst)
 {
@@ -175,16 +173,17 @@ int check_env_name(char *str)
 	return (1);
 }
 
-void    free_env_arr(char **env)
+void	free_env_arr(char **env)
 {
-    int i;
-    i = 0;
-    while (env[i])
-    {
-        free(env[i]);
-        ++i;
-    }
-    free(env);
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		++i;
+	}
+	free(env);
 }
 
 int	builtin_func(t_info *info, char **command, t_env **env_lst)

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:56:21 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 23:15:06 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 06:03:19 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,11 @@ char	*get_temp_name(void)
 		num++;
 	}
 	return (name);
+}
+
+void	cleanup_memory(t_info *info, t_process *process)
+{
+	unlink_heredocs(info);
+	free_info(info);
+	free(process);
 }

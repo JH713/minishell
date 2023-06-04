@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 00:27:29 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 06:09:50 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,5 +166,12 @@ void		hd_sigint_handler(int sig);
 char		*get_temp_name(void);
 int			check_builtin(char **command);
 int			fd_check_in_single_bulletin(char *fd);
+void		cleanup_memory(t_info *info, t_process *process);
+int			check_single_builtin(t_info *info);
+void		process_single_builtin(t_info *info);
+void		init_redirect_fd(int *redirect_fd);
+int			put_redirect_fd(t_redirect *redirect, int *redirect_fd, t_info *info);
+void		duplicate_fd(int *redirect_fd, int *dup_fd);
+void		restore_original_fd(int *redirect_fd, int *dup_fd);
 
 #endif

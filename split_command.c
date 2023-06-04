@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:39:04 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/04 15:59:39 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/05 05:53:49 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_list	*split_command(char *command, int i, int flag)
 	t_list	*cmds;
 
 	cmds = 0;
-	while (command[i])
+	while (command && command[i])
 	{
 		if (is_not_sep(command[i]))
 			i = get_word(command, i, &cmds, &flag);

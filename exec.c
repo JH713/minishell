@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 01:10:26 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 06:06:26 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,49 +74,7 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 		close(proc[info ->process_num - 2].fd[0]);
 }
 
-int	check_builtin(char **command)
-{
-	if (ft_strncmp(command[0], "exit", 5) == 0)
-		return (1);
-	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
-		return (1);
-	else if (ft_strncmp(command[0], "export", 7) == 0)
-	{
-		if (command[1] && command[1][0] == '-')
-			return (0);
-		return (1);
-	}
-	else if (ft_strncmp(command[0], "unset", 6) == 0)
-	{
-		if (command[1] && command[1][0] == '-')
-			return (0);
-		return (1);
-	}
-	else if (ft_strncmp(command[0], "pwd", 4) == 0)
-	{
-		if (command[1] && command[1][0] == '-')
-			return (0);
-		return (1);
-	}
-	else if (ft_strncmp(command[0], "cd", 3) == 0)
-	{
-		if (command[1] && command[1][0] == '-')
-			return (0);
-		return (1);
-	}
-	else if (ft_strncmp(command[0], "echo", 5) == 0)
-	{
-		if (command[1])
-		{
-			if (ft_strncmp(command[1], "-n", 3) == 0)
-				return (1);
-			else if (command[1][0] == '-')
-				return (0);
-		}
-		return (1);
-	}
-	return (0);
-}
+
 
 int	check_num(char *num)
 {
