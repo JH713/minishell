@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sep.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:40:55 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 23:00:19 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:58:05 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	is_not_sep(char c)
 
 int	check_sep_input(char *sep, int i)
 {
-	char *temp;
+	char	*temp;
+
 	while (sep[i] == '<' && i < 2)
 		++i;
 	if (sep[i + 1] == 0)
@@ -41,7 +42,7 @@ int	check_sep_input(char *sep, int i)
 
 int	check_sep_output(char *sep, int i)
 {
-	char *temp;
+	char	*temp;
 
 	while (sep[i] == '>' && i < 2)
 		++i;

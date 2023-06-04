@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:42:16 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 21:57:28 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:53:36 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,23 @@ int	check_prev(char *command, int i, t_list *cmds)
 		return (1);
 	}
 	return (0);
+}
+
+int	handle_consecutive_redirection_error(char *command, int i)
+{
+	char	*temp;
+
+	if (!command[i + 1] || command[i + 1] != command[i])
+	{
+		temp = ft_substr(&command[i], 0, 1);
+		error_m1(temp);
+		free(temp);
+	}
+	else
+	{
+		temp = ft_substr(&command[i], 0, 2);
+		error_m1(temp);
+		free(temp);
+	}
+	return (-1);
 }

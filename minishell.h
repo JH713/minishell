@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 22:02:18 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:54:00 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void		error_m1(char *str);
 int			check_sep_input(char *sep, int i);
 int			check_sep_output(char *sep, int i);
 int			check_sep(char *sep);
+int			join_sep_to_fd(char *command, int start, int i, t_list **cmds);
 int			find_sep(char *command, int start, int i, t_list **cmds);
 int			get_word(char *command, int i, t_list **cmds, int *flag);
 int			handle_consecutive_redirection_error(char *command, int i);

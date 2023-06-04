@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:40:36 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/01 19:24:17 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:52:03 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,3 @@ int	check_if_pair(char	*content, char quotes)
 	}
 	return (0);
 }
-

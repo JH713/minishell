@@ -6,7 +6,7 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:33:32 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 21:58:01 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:57:04 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	init_command(t_command *command, int num)
 {
 	command -> input = 0;
 	command -> output = 0;
-
 	command->command = (char **)malloc(sizeof(char *) * (num + 1));
 	if (!command->command)
 		exit(1);

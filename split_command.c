@@ -6,51 +6,43 @@
 /*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:39:04 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 23:25:19 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:59:39 by hyunjki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	join_sep_to_fd(char *command, int start, int i, t_list **cmds)
-// {
-// 	char	*sep;
-// 	t_list	*last;
-// 	char	*temp;
-
-// 	while (command[i] && (command[i] == '<' || command[i] == '>'))
-// 		i++;
-// 	last = ft_lstlast(*cmds);
-// 	sep = ft_substr(command, start, i - start);
-// 	if (!check_sep(sep))
-// 		return (-1);
-// 	temp = last -> content;
-// 	last -> content = ft_strjoin(last -> content, sep);
-// 	free(temp);
-// 	return (0);
-// }
-
-int	find_sep(char *command, int start, int i, t_list **cmds)
+int	join_sep_to_fd(char *command, int start, int i, t_list **cmds)
 {
 	char	*sep;
 	t_list	*last;
 	char	*temp;
 
+	while (command[i] && (command[i] == '<' || command[i] == '>'))
+		i++;
+	last = ft_lstlast(*cmds);
+	sep = ft_substr(command, start, i - start);
+	if (!check_sep(sep))
+	{
+		free(sep);
+		return (-1);
+	}
+	temp = last -> content;
+	last -> content = ft_strjoin(last -> content, sep);
+	free(temp);
+	free(sep);
+	return (i);
+}
+
+int	find_sep(char *command, int start, int i, t_list **cmds)
+{
+	char	*sep;
+
 	if (check_prev(command, i, *cmds))
 	{
-		while (command[i] && (command[i] == '<' || command[i] == '>'))
-			i++;
-		last = ft_lstlast(*cmds);
-		sep = ft_substr(command, start, i - start);
-		if (!check_sep(sep))
-		{
-			free(sep);
+		i = join_sep_to_fd(command, start, i, cmds);
+		if (i == -1)
 			return (-1);
-		}
-		temp = last -> content; //이전꺼 free?
-		last -> content = ft_strjoin(last -> content, sep);
-		free(temp);
-		free(sep);
 	}
 	else
 	{
@@ -65,25 +57,6 @@ int	find_sep(char *command, int start, int i, t_list **cmds)
 		add_list(sep, cmds);
 	}
 	return (i - start);
-}
-
-int	handle_consecutive_redirection_error(char *command, int i)
-{
-	char	*temp;
-
-	if (!command[i + 1] || command[i + 1] != command[i])
-	{
-		temp = ft_substr(&command[i], 0, 1);
-		error_m1(temp);
-		free(temp);
-	}
-	else
-	{
-		temp = ft_substr(&command[i], 0, 2);
-		error_m1(temp);
-		free(temp);
-	}
-	return (-1);
 }
 
 int	get_operator(char *command, int i, t_list **cmds, int *flag)
@@ -151,7 +124,7 @@ t_list	*split_command(char *command, int i, int flag)
 				if (i == -1)
 				{
 					ft_lstclear(&cmds, free);
-					return (NULL); // list free하기? 
+					return (NULL);
 				}
 			}
 		}
