@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 22:23:07 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/03 21:22:27 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/05 03:42:47 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	expand_env(char **line, t_env *env_lst)
 			env_value = ft_itoa(exit_status);
 			join_env(line, env_value, i, i + 2);
 			i += ft_strlen(env_value);
+			free(env_value);
 		}
 		else if ((*line)[i] == '$')
 		{

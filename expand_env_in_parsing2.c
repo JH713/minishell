@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:21:49 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 03:34:47 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 03:44:29 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ void	handle_exit_status_variable(char **line, int *i, char **env_value)
 	*env_value = ft_itoa(exit_status);
 	join_env_2(line, *env_value, *i, *i + 2);
 	*i += ft_strlen(*env_value);
+	free(*env_value);
 }
