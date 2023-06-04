@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 19:10:01 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 05:37:15 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	export_env(t_env **env_lst, char **env)
 		}
 		while (curr)
 		{
-			if (ft_strncmp(curr->key, env[i], idx) == 0)
+			if (ft_strncmp(curr->key, key, ft_strlen(key) + 1) == 0)
 			{
 				free(curr->value);
 				curr->value = ft_substr(env[i], idx + 1, ft_strlen(env[i]) - 1 - idx);
@@ -248,14 +248,17 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		free_env_arr(env);
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "unset", 6) == 0) // 환경변수 이름에 알파벳이랑 _만 들어가도록
+	else if (ft_strncmp(command[0], "unset", 6) == 0)
 	{
 		if (command[1])
 		{
 			if (command[1][0] == '-')
 				return (0);
 			if (env_lst_unset(env_lst, &command[1]) == 0)
+			{
+				free_env_arr(env);
 				return (-1);
+			}
 		}
 		free_env_arr(env);
 		return (1);
