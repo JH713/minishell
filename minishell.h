@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 23:39:02 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 00:27:29 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,5 +165,6 @@ void		init_in_while(char *command);
 void		hd_sigint_handler(int sig);
 char		*get_temp_name(void);
 int			check_builtin(char **command);
+int			fd_check_in_single_bulletin(char *fd);
 
 #endif

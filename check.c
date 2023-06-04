@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 19:06:53 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 00:29:29 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,24 @@ int	fd_check(char *fd)
 	fd_num = ft_atoi(fd);
 	if (fd_num >= 256)
 		minishell_error(fd, strerror(9), 1);
+	return (fd_num);
+}
+
+int	fd_check_in_single_bulletin(char *fd)
+{
+	int	fd_num;
+
+	if (ft_strlen(fd) > 3)
+	{
+		minishell_error_not_exit(fd, strerror(9), 1);
+		return (-1);
+	}
+	fd_num = ft_atoi(fd);
+	if (fd_num >= 256)
+	{
+		minishell_error_not_exit(fd, strerror(9), 1);
+		return (-1);
+	}
 	return (fd_num);
 }
 
