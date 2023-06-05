@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 06:08:16 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 06:08:59 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:58:22 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,16 @@ static int	is_fd_in_redirect_fd(int fd, int *redirect_fd)
 	return (i);
 }
 
-int	put_redirect_fd(t_redirect *redirect, int *redirect_fd, t_info *info)
+int	put_redirect_fd(t_redirect *re, int *redirect_fd, t_info *info)
 {
 	int	fd;
 	int	i;
 
-	while (redirect)
+	while (re)
 	{
-		if (redirect->fd)
+		if (re->fd)
 		{
-			fd = fd_check_in_single_bulletin(redirect->fd);
+			fd = fd_check_in_single_bulletin(re->fd);
 			if (fd < 0)
 			{
 				unlink_heredocs(info);
@@ -63,7 +63,7 @@ int	put_redirect_fd(t_redirect *redirect, int *redirect_fd, t_info *info)
 			else
 				redirect_fd[i] = fd;
 		}
-		redirect = redirect->next;
+		re = re->next;
 	}
 	return (1);
 }

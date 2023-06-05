@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:37:41 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 22:22:33 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	sigint_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	exit_status = 1;
+	g_exit_status = 1;
 }
 
 void	hd_sigint_handler(int sig)

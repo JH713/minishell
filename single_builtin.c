@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 06:05:23 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 15:34:21 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,12 @@ int	check_builtin(char **command)
 			return (0);
 		return (1);
 	}
-	else if (ft_strncmp(command[0], "pwd", 4) == 0)
+	return (0);
+}
+
+int	check_builtin2(char **command)
+{
+	if (ft_strncmp(command[0], "pwd", 4) == 0)
 	{
 		if (command[1] && command[1][0] == '-')
 			return (0);
@@ -59,13 +64,17 @@ int	check_builtin(char **command)
 int	check_single_builtin(t_info *info)
 {
 	char	**command;
+	int		is_builtin;
 
 	if (info->process_num != 1)
 		return (0);
 	command = info->commands[0].command;
 	if (command[0] == NULL)
 		return (0);
-	return (check_builtin(command));
+	is_builtin = 0;
+	if (check_builtin(command) || check_builtin2(command))
+		is_builtin = 1;
+	return (is_builtin);
 }
 
 void	process_single_builtin(t_info *info)
@@ -93,6 +102,6 @@ void	process_single_builtin(t_info *info)
 	unlink_heredocs(info);
 	restore_original_fd(redirect_fd, dup_fd);
 	if (ret == 1)
-		exit_status = 0;
+		g_exit_status = 0;
 	free_info(info);
 }

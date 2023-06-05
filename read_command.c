@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:16:48 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 05:58:04 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ static char	last_char_without_whitespace(char *str)
 
 static void	handle_exit_status(void)
 {
-	if (exit_status == 2)
+	if (g_exit_status == 2)
 	{
-		exit_status = 130;
+		g_exit_status = 130;
 		printf("\n");
 	}
-	else if (exit_status == 3)
+	else if (g_exit_status == 3)
 	{
-		exit_status = 131;
+		g_exit_status = 131;
 		printf("Quit: 3\n");
 	}
 }

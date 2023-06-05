@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 15:37:33 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 18:03:16 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,31 @@ void	free_env_arr(char **env)
 	free(env);
 }
 
+void	builtin_exit(t_info *info, char **command)
+{
+	unsigned char	exit_num;
+
+	exit_num = 0;
+	unlink_heredocs(info);
+	if (command[1])
+	{
+		if (command[2])
+			minishell_error(command[0], "too many arguments", 1);
+		if (!check_num(command[1]))
+			minishell_arg_error(command[0], command[1], \
+			"numeric argument required", 255);
+		exit_num = (unsigned char)ft_atoi(command[1]);
+	}
+	exit(exit_num);
+}
+
+int	builtin_env(char **env, int env_num)
+{
+	print_env(env, env_num);
+	free_env_arr(env);
+	return (1);
+}
+
 int	builtin_func(t_info *info, char **command, t_env **env_lst)
 {
 	char	**env;
@@ -196,26 +221,9 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 	env = env_lst_to_arr(*env_lst);
 	env_num = env_lst_size(*env_lst);
 	if (ft_strncmp(command[0], "exit", 5) == 0)
-	{
-		unsigned char exit_num;
-		exit_num = 0;
-		unlink_heredocs(info);
-		if (command[1])
-		{
-			if (command[2])
-				minishell_error(command[0], "too many arguments", 1);
-			if (!check_num(command[1]))
-				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
-			exit_num = (unsigned char)ft_atoi(command[1]);
-		}
-		exit(exit_num);
-	}
+		builtin_exit(info, command);
 	else if (ft_strncmp(command[0], "env", 4) == 0 && command[1] == NULL)
-	{
-		print_env(env, env_num);
-		free_env_arr(env);
-		return (1);
-	}
+		return (builtin_env(env, env_num));
 	else if (ft_strncmp(command[0], "export", 7) == 0)
 	{
 		t_env	*sorted_lst;
@@ -284,7 +292,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 			{
 				ft_putendl_fd("minishell: cd: HOME path not found", 2);
 		free_env_arr(env);
-				exit_status = 1;
+				g_exit_status = 1;
 				return (1);
 			}
 			ret = chdir(lst->value);
@@ -302,7 +310,7 @@ int	builtin_func(t_info *info, char **command, t_env **env_lst)
 		}
 		if (ret == -1)
 		{
-			exit_status = 1;
+			g_exit_status = 1;
 			ft_putstr_fd("minishell: ", 2);
 			perror("cd");
 		}

@@ -6,13 +6,11 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 05:38:27 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 18:37:15 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:52:36 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int exit_status;
 
 void	init(int argc, char **env, t_env **env_lst, char **command)
 {

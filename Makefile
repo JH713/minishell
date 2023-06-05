@@ -6,7 +6,7 @@
 #    By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 21:56:35 by jihyeole          #+#    #+#              #
-#    Updated: 2023/06/05 06:10:51 by jihyeole         ###   ########.fr        #
+#    Updated: 2023/06/05 17:50:04 by jihyeole         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS = main.c init.c utils.c env_utils1.c env_utils2.c make_heredoc.c \
 	   expand_and_fill_command.c expand_env_in_parsing.c expand_env_in_parsing2.c\
 	   handle_input_redirection.c handle_output_redirection.c parsing_utils.c\
 	   parsing_utils2.c put_command.c check_sep.c split_command.c error_m.c free_info.c\
-	   signal.c single_builtin.c redirect_fd.c
+	   signal.c single_builtin.c single_builtin2.c redirect_fd.c env_utils3.c
 OBJS = $(SRCS:.c=.o)
 CC = CC
 CFLAGS = -Wall -Wextra -Werror -I ~/.brew/opt/readline/include

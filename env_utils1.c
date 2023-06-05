@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 19:19:41 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:49:24 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,47 +64,4 @@ t_env	*get_lst_by_key(t_env *env_lst, char *key)
 		env_lst = env_lst->next;
 	}
 	return (NULL);
-}
-
-int	env_lst_unset(t_env **env_lst, char **str)
-{
-	t_env	*lst;
-	t_env	*prev;
-	int		i;
-	int		flag;
-
-	i = 0;
-	flag = 1;
-	while (str[i])
-	{
-		if (ft_strncmp(str[i], "_", 2) == 0)
-		{
-			++i;
-			continue ;
-		}
-		if (check_env_name(str[i]) == 0)
-		{
-			minishell_argstr_error("unset", str[i], "not a valid identifier", 1);
-			flag = 0;
-			++i;
-			continue ;
-		}
-		lst = *env_lst;
-		while (lst)
-		{
-			if (ft_strncmp(lst->key, str[i], (ft_strlen(lst->key) + 1)) == 0)
-			{
-				if (lst == *env_lst)
-					*env_lst = NULL;
-				else
-					prev->next = lst->next;
-				env_lstdelone(lst);
-				break ;
-			}
-			prev = lst;
-			lst = lst->next;
-		}
-		++i;
-	}
-	return (flag); 
 }

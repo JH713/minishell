@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/04 23:15:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	heredoc_input(t_redirect *input, t_info *info, int type, int j)
 	info->heredocs[j] = ft_strdup(input->file);
 	if (stat == 2)
 	{
-		exit_status = 1;
+		g_exit_status = 1;
 		unlink_heredocs(info);
 		return (0);
 	}

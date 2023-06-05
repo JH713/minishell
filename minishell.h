@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 15:59:57 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:02:09 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-extern int	exit_status;
+extern int	g_exit_status;
 
 typedef struct s_env
 {
@@ -121,19 +121,19 @@ t_info		*parse_command(char *command, t_env *env_lst);
 void		free_info(t_info *info);
 void		free_command(char **command);
 void		free_redirect(t_redirect *rd);
-void    	free_heredocs(t_info *info);
+void		free_heredocs(t_info *info);
 ////////	////////////////////////////
 int			check_num(char *num);
-void	init(int argc, char **env, t_env **env_lst, char **command);
+void		init(int argc, char **env, t_env **env_lst, char **command);
 void		get_env_lst(t_env **env_lst, char **env);
 int			get_first_idx(char *str, char c);
 char		**get_path(t_env *env_lst);
 void		env_lst_add_back(t_env **lst, t_env *new);
 t_env		*env_lst_new(char *env);
 void		print_env(char **env, int env_num);
-void		minishell_error_not_exit(char *command, char *err_msg, int exit_num);
+void		minishell_error_not_exit(char *cmd, char *err_msg, int exit_num);
 void		minishell_error(char *command, char *err_msg, int exit_num);
-void		minishell_arg_error(char *command, char *arg, char *err_msg, int exit_num);
+void		minishell_arg_error(char *cmd, char *arg, char *msg, int exit_num);
 void		minishell_perror(char *msg, int exit_num);
 void		print_error(char *msg, int status);
 int			unlink_heredocs(t_info *comm_info);
@@ -154,12 +154,12 @@ int			unlink_heredocs(t_info *comm_info);
 void		wait_all_child(int process_cnt, t_process *process);
 int			fd_check(char *fd);
 char		*execute_check(char *command, char **path);
-void		execute_command(t_process *proc, int i, t_info *info, t_env **env_lst);
+void		execute_command(t_process *proc, int i, t_info *info, t_env **lst);
 void		fork_and_execute(t_process *proc, t_info *info, t_env **env_lst);
 int			exec_single_builtin(t_info *info, t_env **env_lst);
 int			builtin_func(t_info *info, char **command, t_env **env_lst);
 int			check_env_name(char *str);
-void		minishell_argstr_error(char *command, char *arg, char *err_msg, int exit_num);
+void		minishell_argstr_error(char *cmd, char *arg, char *msg, int num);
 void		sigint_handler(int sig);
 void		init_in_while(char *command);
 void		hd_sigint_handler(int sig);
@@ -170,9 +170,9 @@ void		cleanup_memory(t_info *info, t_process *process);
 int			check_single_builtin(t_info *info);
 void		process_single_builtin(t_info *info);
 void		init_redirect_fd(int *redirect_fd);
-int			put_redirect_fd(t_redirect *redirect, int *redirect_fd, t_info *info);
+int			put_redirect_fd(t_redirect *re, int *redirect_fd, t_info *info);
 void		duplicate_fd(int *redirect_fd, int *dup_fd);
 void		restore_original_fd(int *redirect_fd, int *dup_fd);
-char	*check_cmd2(char *content, t_env *env_lst);
+char		*check_cmd2(char *content, t_env *env_lst);
 
 #endif

@@ -6,15 +6,13 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 15:31:17 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:00:08 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int exit_status;
-
-void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
+void	execute_command(t_process *proc, int i, t_info *info, t_env **lst)
 {
 	char	**path;
 	char	**env;
@@ -23,16 +21,11 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	path = get_path(*env_lst);
+	path = get_path(*lst);
 	close_unused_pipes(i, info->process_num, proc);
 	redirect_process(proc, info, i);
 	command = info->commands[i].command;
-	if (command[0] == NULL)
-	{
-		unlink_heredocs(info);
-		exit(0);
-	}
-	if (builtin_func(info, command, env_lst))
+	if (command[0] == NULL || builtin_func(info, command, lst))
 	{
 		unlink_heredocs(info);
 		exit(0);
@@ -40,7 +33,7 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **env_lst)
 	full_path = execute_check(command[0], path);
 	free(command[0]);
 	command[0] = full_path;
-	env = env_lst_to_arr(*env_lst);
+	env = env_lst_to_arr(*lst);
 	execve(command[0], command, env);
 	perror(command[0]);
 	exit(1);
@@ -72,49 +65,4 @@ void	fork_and_execute(t_process *proc, t_info *info, t_env **env_lst)
 	}
 	if (info->process_num >= 2)
 		close(proc[info ->process_num - 2].fd[0]);
-}
-
-
-
-int	check_num(char *num)
-{
-	if (*num == '-' && *num)
-		num++;
-	while (*num)
-	{
-		if (!ft_isdigit(*num))
-			return (0);
-		num++;
-	}
-	return (1);
-}
-
-int	exec_single_builtin(t_info *info, t_env **env_lst)
-{
-	char	**command;
-	unsigned char exit_num;
-
-	command = info->commands[0].command;
-	redirect_process(NULL, info, 0);
-	if (ft_strncmp(command[0], "exit", 5) == 0)
-	{
-		ft_putendl_fd("exit", 1);
-		exit_num = 0;
-		if (command[1])
-		{
-			if (command[2])
-			{
-				minishell_error_not_exit(command[0], "too many arguments", 1);
-				return (-1);
-			}
-			unlink_heredocs(info);
-			if (!check_num(command[1]))
-				minishell_arg_error(command[0], command[1], "numeric argument required", 255);
-			exit_num = (unsigned char)ft_atoi(command[1]);
-		}
-		else
-			unlink_heredocs(info);
-		exit(exit_num);
-	}
-	return (builtin_func(info, command, env_lst));
 }

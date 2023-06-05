@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:33:32 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 04:38:12 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:48:16 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ int	check_word_num(t_list *list, t_env *env_lst)
 			flag = 1;
 		else
 		{
-			if (flag == 0) //환경변수 확장했을 때 수를 더하도록 수정함 
-				//여기서 추가로 세주기 
+			if (flag == 0)
 				num += count_word_with_expand(content, env_lst);
 			flag = 0;
 		}

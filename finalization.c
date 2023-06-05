@@ -6,13 +6,11 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:03:24 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/05/30 20:19:47 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	exit_status;
 
 int	unlink_heredocs(t_info *comm_info)
 {
@@ -37,9 +35,9 @@ void	wait_all_child(int process_cnt, t_process *process)
 	{
 		waitpid(process[i].pid, &status, 0);
 		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
+			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-			exit_status = WTERMSIG(status);
+			g_exit_status = WTERMSIG(status);
 		++i;
 	}
 }

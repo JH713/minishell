@@ -6,10 +6,9 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:21:49 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 03:44:29 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include"minishell.h"
 
@@ -64,7 +63,7 @@ void	handle_variable_expansion(char **line, int flag, int *i, int *j)
 
 void	handle_exit_status_variable(char **line, int *i, char **env_value)
 {
-	*env_value = ft_itoa(exit_status);
+	*env_value = ft_itoa(g_exit_status);
 	join_env_2(line, *env_value, *i, *i + 2);
 	*i += ft_strlen(*env_value);
 	free(*env_value);
