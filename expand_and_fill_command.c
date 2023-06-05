@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:31:12 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 04:44:35 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:47:23 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	expand_and_fill_command(t_command *command, \
 	i = 0;
 	while (temp_arr[i])
 	{
-		(command->command)[(*j)++] = check_cmd(temp_arr[i], env_lst);
+		(command->command)[(*j)++] = check_cmd(temp_arr[i]);
 		++i;
 	}
 	i = -1;

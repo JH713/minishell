@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 06:09:50 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:47:38 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int			expand_env_inner(char **line, t_env *env_lst, int *i, int flag);
 void		check_quotes_env(char **line, t_env *env_lst, int *i);
 void		expand_env_2(char **line, t_env *env_lst);
 void		check_quotes_in_cmd(char *content, char **temp, int *i, int *j);
-char		*check_cmd(char	*content, t_env *env_lst);
+char		*check_cmd(char	*content);
 void		count_if_quotes(char **temp, int *i);
 int			count_words(char *temp, int i);
 int			count_word_with_expand(char *content, t_env *env_lst);
