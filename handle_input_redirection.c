@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input_redirection.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunjki2 <hyunjki2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:07:01 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/03 18:49:44 by hyunjki2         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:00:03 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_list	*handle_input_redirection(t_info *info, \
 {
 	char	*file;
 
-	file = check_cmd(list -> next -> content, env_lst);
+	file = check_cmd2(list -> next -> content, env_lst);
 	put_input(info, list, command, file);
 	list = list -> next;
 	return (list);

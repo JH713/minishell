@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:36:38 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 15:47:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:59:34 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,30 @@ char	*check_cmd(char	*content)
 	int		i;
 	int		j;
 
+	temp = (char *)malloc(sizeof(char) * (ft_strlen(content)+1));
+	if (!temp)
+		exit(1);
+	i = 0;
+	j = 0;
+	while (content[i])
+	{
+		if (content[i] == '"' || content[i] == '\'')
+			check_quotes_in_cmd(content, &temp, &i, &j);
+		else
+			temp[j++] = content[i++];
+	}
+	temp[j] = 0;
+	return (temp);
+}
+
+char	*check_cmd2(char *content, t_env *env_lst)
+{
+	char	*temp;
+	int		i;
+	int		j;
+
+	if (ft_strchr(content, '$'))
+		expand_env_2(&content, env_lst);
 	temp = (char *)malloc(sizeof(char) * (ft_strlen(content)+1));
 	if (!temp)
 		exit(1);

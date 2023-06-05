@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 15:47:38 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:59:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,5 +173,6 @@ void		init_redirect_fd(int *redirect_fd);
 int			put_redirect_fd(t_redirect *redirect, int *redirect_fd, t_info *info);
 void		duplicate_fd(int *redirect_fd, int *dup_fd);
 void		restore_original_fd(int *redirect_fd, int *dup_fd);
+char	*check_cmd2(char *content, t_env *env_lst);
 
 #endif
