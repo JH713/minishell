@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 17:49:34 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 17:49:49 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 23:14:12 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,31 @@ int	env_lst_unset(t_env **env_lst, char **str)
 		remove_env_variable(env_lst, str, i);
 	}
 	return (flag);
+}
+
+void	free_env_arr(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		++i;
+	}
+	free(env);
+}
+
+int	check_env_name(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(str[0]))
+		return (0);
+	while (ft_isalnum(str[i]) || str[i] == '_')
+		++i;
+	if (str[i] != 0)
+		return (0);
+	return (1);
 }

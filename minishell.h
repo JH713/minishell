@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 17:02:09 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/05 23:34:05 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,5 +174,14 @@ int			put_redirect_fd(t_redirect *re, int *redirect_fd, t_info *info);
 void		duplicate_fd(int *redirect_fd, int *dup_fd);
 void		restore_original_fd(int *redirect_fd, int *dup_fd);
 char		*check_cmd2(char *content, t_env *env_lst);
+int			builtin_echo(char **command, char **env);
+void		free_env_arr(char **env);
+int			check_env_name(char *str);
+int			builtin_export(char **command, t_env **env_lst, char **env);
+void		free_sorted_lst(t_env *sorted_lst);
+void		print_export_env(t_env *sorted_lst);
+t_env		*get_sorted_lst(t_env *env_lst);
+int			jh_strcmp(char	*s1, char *s2);
+int			builtin_cd(char **command, t_env **env_lst, char **env);
 
 #endif
