@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 05:38:27 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 16:52:36 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/10 01:31:59 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init(int argc, char **env, t_env **env_lst, char **command)
 	*env_lst = NULL;
 	get_env_lst(env_lst, env);
 	*command = NULL;
+	print_maenggu();
 }
 
 void	init_in_while(char *command)

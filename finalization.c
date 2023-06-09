@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:03:24 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/10 01:32:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ int	unlink_heredocs(t_info *comm_info)
 	return (0);
 }
 
-void	wait_all_child(int process_cnt, t_process *process)
+void	wait_all_child(t_info *info, t_process *process)
 {
 	int	i;
 	int	status;
 
 	i = 0;
-	while (i < process_cnt)
+	while (i < info->process_num)
 	{
 		waitpid(process[i].pid, &status, 0);
 		if (WIFEXITED(status))
@@ -40,4 +40,5 @@ void	wait_all_child(int process_cnt, t_process *process)
 			g_exit_status = WTERMSIG(status);
 		++i;
 	}
+	cleanup_memory(info, process);
 }

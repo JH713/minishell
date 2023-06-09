@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:34:05 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/10 01:33:18 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ char		**env_lst_to_arr(t_env *env_lst);
 void		env_lstdelone(t_env *lst);
 t_env		*get_lst_by_key(t_env *env_lst, char *key);
 int			env_lst_unset(t_env **env_lst, char **str);
-void		create_pipe(t_process *process, int process_cnt);
+int			create_pipe(t_process *process, t_info *info);
 void		close_unused_pipes(int i, int process_num, t_process *process);
 int			unlink_heredocs(t_info *comm_info);
-void		wait_all_child(int process_cnt, t_process *process);
+void		wait_all_child(t_info *info, t_process *process);
 int			fd_check(char *fd);
 char		*execute_check(char *command, char **path);
 void		execute_command(t_process *proc, int i, t_info *info, t_env **lst);
@@ -183,5 +183,7 @@ void		print_export_env(t_env *sorted_lst);
 t_env		*get_sorted_lst(t_env *env_lst);
 int			jh_strcmp(char	*s1, char *s2);
 int			builtin_cd(char **command, t_env **env_lst, char **env);
+void		print_error_not_exit(char *msg, int status);
+void		print_maenggu(void);
 
 #endif

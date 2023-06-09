@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:17:55 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 17:02:55 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/10 00:57:58 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,13 @@ void	print_error(char *msg, int status)
 		ft_putendl_fd(msg, 2);
 	g_exit_status = 1;
 	exit(1);
+}
+
+void	print_error_not_exit(char *msg, int status)
+{
+	if (status == 0)
+		perror(msg);
+	else if (status == 1)
+		ft_putendl_fd(msg, 2);
+	g_exit_status = 1;
 }

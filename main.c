@@ -6,13 +6,25 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:40:04 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/10 01:32:54 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_exit_status;
+
+void	print_maenggu(void)
+{
+	int		fd;
+	size_t	length;
+	char	buff[500001];
+
+	fd = open("maenggu", O_RDONLY);
+	length = read(fd, buff, 500000);
+	write(1, buff, length);
+	close(fd);
+}
 
 t_info	*parse_command(char *command, t_env *env_lst)
 {
@@ -64,9 +76,9 @@ int	main(int argc, char *argv[], char **env)
 			continue ;
 		}
 		process = (t_process *)malloc(sizeof(t_process) * info->process_num);
-		create_pipe(process, info->process_num);
+		if (!create_pipe(process, info))
+			continue ;
 		fork_and_execute(process, info, &env_lst);
-		wait_all_child(info->process_num, process);
-		cleanup_memory(info, process);
+		wait_all_child(info, process);
 	}
 }
