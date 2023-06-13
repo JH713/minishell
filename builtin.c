@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 15:22:23 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 18:25:51 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ static void	builtin_exit(t_info *info, char **command)
 	{
 		if (command[2])
 			minishell_error(command[0], "too many arguments", 1);
-		if (!check_num(command[1]) || command[1][0] == 0)
+		if ((command[1][0] == '+' || command[1][0] == '-') && check_num(&command[1][1]))
+			exit_num = (unsigned char)ft_atoi(command[1]);
+		else if (!check_num(command[1]) || command[1][0] == 0)
 			minishell_arg_error(command[0], command[1], \
 			"numeric argument required", 255);
-		exit_num = (unsigned char)ft_atoi(command[1]);
+		else
+			exit_num = (unsigned char)ft_atoi(command[1]);
 	}
 	exit(exit_num);
 }

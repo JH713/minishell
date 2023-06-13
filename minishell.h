@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 15:15:09 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 18:22:29 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,5 +184,6 @@ int			jh_strcmp(char	*s1, char *s2);
 int			builtin_cd(char **command, t_env **env_lst, char **env);
 void		print_error_not_exit(char *msg, int status);
 void		print_maenggu(void);
+long long	ft_atol(const char *str);
 
 #endif

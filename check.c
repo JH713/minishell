@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 15:13:15 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 18:13:15 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*execute_check(char *command, char **path)
 		while (path[i])
 		{
 			full_path = ft_strjoin(path[i], command);
-			if (access(full_path, X_OK) == 0 && stat(command, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
+			if (access(full_path, X_OK) == 0 && stat(full_path, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
 				return (full_path);
 			free(full_path);
 			++i;

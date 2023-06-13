@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:33:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:35:57 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:45:44 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	builtin_cd(char **command, t_env **env_lst, char **env)
 		g_exit_status = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror("cd");
+		return (-1);
 	}
 	free_env_arr(env);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:56:40 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/01 00:16:16 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:28:27 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,12 @@ char	**env_lst_to_arr(t_env *env_lst)
 	i = 0;
 	while (env_lst)
 	{
-		env[i] = get_env_str(env_lst);
+		if (env_lst->value)
+		{
+			env[i] = get_env_str(env_lst);
+			++i;
+		}
 		env_lst = env_lst->next;
-		++i;
 	}
 	env[i] = NULL;
 	return (env);

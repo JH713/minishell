@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 17:49:24 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:02:37 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,16 @@ t_env	*env_lst_new(char *env)
 
 	new_lst = (t_env *)malloc(sizeof(t_env));
 	idx = get_first_idx(env, '=');
-	new_lst->key = ft_substr(env, 0, idx);
-	new_lst->value = ft_substr(env, idx + 1, ft_strlen(env) - 1 - idx);
+	if (idx == -1)
+	{
+		new_lst->key = ft_strdup(env);
+		new_lst->value = NULL;
+	}
+	else
+	{
+		new_lst->key = ft_substr(env, 0, idx);
+		new_lst->value = ft_substr(env, idx + 1, ft_strlen(env) - 1 - idx);	
+	}
 	new_lst->next = NULL;
 	return (new_lst);
 }
