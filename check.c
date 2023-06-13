@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 18:13:15 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 18:47:18 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ char	*execute_check(char *command, char **path)
 
 	if (command[0] == '.' || command[0] == '/')
 	{
+		if (access(command, F_OK) != 0)
+			minishell_perror(command, 127);
 		if (access(command, X_OK) != 0)
 			minishell_perror(command, 126);
 		if (stat(command, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
