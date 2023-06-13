@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:21:49 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 16:56:06 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 16:16:09 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	handle_variable_expansion(char **line, int flag, int *i, int *j)
 	*j = 1;
 	if (flag == 1)
 	{
-		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\" $") == 0)
+		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\" $:") == 0)
 		{
 			if ((*line)[*i + *j] == '\'')
 			{
@@ -56,7 +56,7 @@ void	handle_variable_expansion(char **line, int flag, int *i, int *j)
 	}
 	else
 	{
-		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\"\' $") == 0)
+		while ((*line)[*i + *j] && ft_inset((*line)[*i + *j], "\"\' $:") == 0)
 			*j += 1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:10:17 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:34:44 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 16:07:37 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,19 @@ static t_env	*dup_env_lst(t_env *env_lst)
 	return (new_lst);
 }
 
-static void	insert_sorted_env(t_env *sorted_lst, t_env	*new)
+static void	insert_sorted_env(t_env **sorted_lst, t_env	*new)
 {
 	t_env	*prev;
 	t_env	*curr;
 
-	curr = sorted_lst;
+	curr = *sorted_lst;
 	while (curr)
 	{
 		if (jh_strcmp(new->key, curr->key) < 0)
 		{
 			new->next = curr;
-			if (curr == sorted_lst)
-				sorted_lst = new;
+			if (curr == *sorted_lst)
+				*sorted_lst = new;
 			else
 				prev->next = new;
 			break ;
@@ -79,13 +79,8 @@ t_env	*get_sorted_lst(t_env *env_lst)
 	env_lst = env_lst->next;
 	while (env_lst)
 	{
-		if (ft_strncmp(env_lst->key, "_", 2) == 0)
-		{
-			env_lst = env_lst->next;
-			continue ;
-		}
 		new = dup_env_lst(env_lst);
-		insert_sorted_env(sorted_lst, new);
+		insert_sorted_env(&sorted_lst, new);
 		env_lst = env_lst->next;
 	}
 	return (sorted_lst);

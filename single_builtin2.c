@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:45:06 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 16:50:57 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:23:37 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	exec_single_exit(t_info *info, char **cmd)
 			return (-1);
 		}
 		unlink_heredocs(info);
-		if (!check_num(cmd[1]))
+		if (!check_num(cmd[1])  || cmd[1][0] == 0)
 			minishell_arg_error(cmd[0], cmd[1], \
 			"numeric argument required", 255);
 		exit_num = (unsigned char)ft_atoi(cmd[1]);
