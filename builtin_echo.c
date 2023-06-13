@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:01:27 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:03:27 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:13:32 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void	echo_option_n(char **command)
 	int	i;
 
 	i = 2;
+	if (!command[i])
+		return ;
 	while (check_option_n(command[i]))
 		++i;
 	while (command[i])

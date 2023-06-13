@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/10 01:33:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:15:09 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -62,7 +63,6 @@ typedef struct s_process
 }	t_process;
 
 char		*read_command(void);
-/////////////////////////////////
 void		add_list(char *str, t_list **cmds);
 int			is_not_sep(char c);
 int			ft_strcmp(char	*s1, char *s2);
@@ -122,7 +122,6 @@ void		free_info(t_info *info);
 void		free_command(char **command);
 void		free_redirect(t_redirect *rd);
 void		free_heredocs(t_info *info);
-////////	////////////////////////////
 int			check_num(char *num);
 void		init(int argc, char **env, t_env **env_lst, char **command);
 void		get_env_lst(t_env **env_lst, char **env);

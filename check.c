@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 00:29:29 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:13:15 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,14 @@ char	*execute_check(char *command, char **path)
 {
 	int		i;
 	char	*full_path;
+	struct stat path_stat;
 
 	if (command[0] == '.' || command[0] == '/')
 	{
 		if (access(command, X_OK) != 0)
 			minishell_perror(command, 126);
+		if (stat(command, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+			minishell_error(command, "is a directory", 126);
 		return (ft_strdup(command));
 	}
 	i = 0;
@@ -59,7 +62,7 @@ char	*execute_check(char *command, char **path)
 		while (path[i])
 		{
 			full_path = ft_strjoin(path[i], command);
-			if (access(full_path, X_OK) == 0)
+			if (access(full_path, X_OK) == 0 && stat(command, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
 				return (full_path);
 			free(full_path);
 			++i;

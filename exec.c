@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 17:00:08 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:25:13 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **lst)
 		exit(0);
 	}
 	full_path = execute_check(command[0], path);
+	// if (ft_strlen(full_path) > 0 && full_path[ft_strlen(full_path) - 1] == '/')
+	// {
+	// 	free(full_path);
+	// 	full_path = "";
+	// }
 	free(command[0]);
 	command[0] = full_path;
 	env = env_lst_to_arr(*lst);
