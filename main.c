@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 19:07:07 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:08:56 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,46 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	return (info);
 }
 
+void	set_last_arg(t_info *info, t_env **env_lst)
+{
+	t_env	*lst;
+	char	*value;
+	char	*tmp;
+	char	**command;
+
+	value = NULL;
+	int i = 0;
+	int	j;
+	if (info->process_num != 1)
+	{
+		lst = get_lst_by_key(*env_lst, "_");
+		tmp = lst->value;
+		lst->value = ft_strdup("");
+		if (tmp)
+			free(tmp);
+		return ;
+	}
+	while (i < info->process_num)
+	{
+		command = info->commands[i].command;
+		j = 0;
+		while (command[j])
+		{
+			value = command[j];
+			++j;
+		}
+		++i;
+	}
+	lst = get_lst_by_key(*env_lst, "_");
+	tmp = lst->value;
+	if (value == NULL)
+		lst->value = ft_strdup("");
+	else
+		lst->value = ft_strdup(value);
+	if (tmp)
+		free(tmp);
+}
+
 int	main(int argc, char *argv[], char **env)
 {
 	t_env		*env_lst;
@@ -70,6 +110,7 @@ int	main(int argc, char *argv[], char **env)
 		info = parse_command(command, env_lst);
 		if (info == NULL || create_heredoc_temp(info) == 0)
 			continue ;
+		set_last_arg(info, &env_lst);
 		if (check_single_builtin(info))
 		{
 			process_single_builtin(info);

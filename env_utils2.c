@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:56:40 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 21:18:54 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:11:13 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,24 @@ void	env_lstdelone(t_env *lst)
 	free(lst);
 }
 
+void	set_oldpwd(t_env **env_lst)
+{
+	t_env	*lst;
+
+	lst = get_lst_by_key(*env_lst, "OLDPWD");
+	if (lst == NULL)
+	{
+		lst = env_lst_new("OLDPWD");
+		env_lst_add_back(env_lst, lst);
+	}
+	else
+	{
+		if (lst->value)
+			free(lst->value);
+		lst->value = NULL;
+	}
+}
+
 void	set_shlvl(t_env **env_lst)
 {
 	t_env	*lst;
@@ -98,6 +116,8 @@ void	set_shlvl(t_env **env_lst)
 		}
 		else
 			lst->value = ft_strdup("1");
+		if (num)
+			free(num);
 	}
 }
 
@@ -114,4 +134,5 @@ void	get_env_lst(t_env **env_lst, char **env)
 		++i;
 	}
 	set_shlvl(env_lst);
+	set_oldpwd(env_lst);
 }
