@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:45:06 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 18:24:59 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/14 19:51:34 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,36 @@ static int	exec_single_exit(t_info *info, char **cmd)
 			return (-1);
 		}
 		unlink_heredocs(info);
-		if ((cmd[1][0] == '+' || cmd[1][0] == '-') && check_num(&cmd[1][1]))
-			exit_num = (unsigned char)ft_atoi(cmd[1]);
-		else if (!check_num(cmd[1])  || cmd[1][0] == 0)
-			minishell_arg_error(cmd[0], cmd[1], \
-			"numeric argument required", 255);
+		if (cmd[1][0] == '-')
+		{
+			if (ft_strlen(cmd[1]) > 20 || !check_num(&cmd[1][1]) || ft_atol(cmd[1]) > 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			if (ft_strncmp(cmd[1], "-9223372036854775809", 21) == 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			exit_num = (unsigned char) ft_atol(cmd[1]);
+		}
+		else if (cmd[1][0] == '+')
+		{
+			if (ft_strlen(cmd[1]) > 20 || !check_num(&cmd[1][1]) || ft_atol(cmd[1]) < 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			if (ft_strncmp(cmd[1], "+9223372036854775808", 21) == 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			exit_num = (unsigned char) ft_atol(cmd[1]);
+		}
 		else
-			exit_num = (unsigned char)ft_atoi(cmd[1]);
+		{
+			if (ft_strlen(cmd[1]) > 19 || !check_num(cmd[1]) || ft_atol(cmd[1]) < 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			if (ft_strncmp(cmd[1], "9223372036854775808", 20) == 0)
+				minishell_arg_error(cmd[0], cmd[1], \
+				"numeric argument required", 255);
+			exit_num = (unsigned char) ft_atol(cmd[1]);
+		}
 	}
 	else
 		unlink_heredocs(info);
