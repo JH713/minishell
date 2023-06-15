@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 21:50:09 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 15:36:30 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/15 20:10:01 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	free_info(t_info *info)
 		free_command((info->commands[i]).command);
 		free_redirect((info->commands[i]).input);
 		free_redirect((info->commands[i]).output);
+		free_redirect((info->commands[i]).redirect);
 		i++;
 	}
 	free(info->commands);

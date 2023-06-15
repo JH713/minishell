@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:33:32 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 16:48:16 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/15 19:09:28 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	init_command(t_command *command, int num)
 {
 	command -> input = 0;
 	command -> output = 0;
+	command ->redirect = 0;
 	command->command = (char **)malloc(sizeof(char *) * (num + 1));
 	if (!command->command)
 		exit(1);
@@ -77,7 +78,10 @@ t_list	*put_command(t_info *info, t_command *command, \
 		if (content[len - 1] == '<')
 			list = handle_input_redirection(info, list, env_lst, command);
 		else if (content[len - 1] == '>')
+		{
+			handle_output_redirection2(info, list, env_lst, command);
 			list = handle_output_redirection(info, list, env_lst, command);
+		}
 		else
 			expand_and_fill_command(command, content, env_lst, &j);
 		list = list -> next;

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:07:01 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/05 16:00:03 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/15 20:12:33 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,13 @@ void	put_input(t_info *info, t_list *list, t_command *command, char *file)
 	char		*fd;
 	int			type;
 	t_redirect	*new;
+	t_redirect	*re_new;
 
 	check_input(info, list, &fd, &type);
 	new = malloc_redirect(type, fd, file);
+	re_new = malloc_redirect(type, ft_strdup(fd), ft_strdup(file)); 
 	add_last(&(command -> input), new);
+	add_last(&(command -> redirect), re_new);
 }
 
 t_list	*handle_input_redirection(t_info *info, \

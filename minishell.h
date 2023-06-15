@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 19:05:00 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/15 19:19:43 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_command
 	char				**command;
 	t_redirect			*input;
 	t_redirect			*output;
+	t_redirect			*redirect;
 }	t_command;
 
 typedef struct s_info
@@ -185,5 +186,7 @@ int			builtin_cd(char **command, t_env **env_lst, char **env);
 void		print_error_not_exit(char *msg, int status);
 void		print_maenggu(void);
 long long	ft_atol(const char *str);
+t_list		*handle_output_redirection2(t_info *info, t_list *list, \
+			t_env *env_lst, t_command *command);
 
 #endif

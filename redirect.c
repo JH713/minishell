@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 21:55:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 00:11:53 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/15 20:00:21 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,22 @@ static void	redirect_input_file(t_redirect *input)
 		print_error("input type error", 1);
 }
 
-static void	redirect_input(t_process *proc, t_info *info, int i)
-{
-	t_redirect	*input;
+// static void	redirect_input(t_process *proc, t_info *info, int i)
+// {
+// 	t_redirect	*input;
 
-	input = info->commands[i].input;
-	if (i != 0)
-	{
-		dup2(proc[i - 1].fd[0], 0);
-		close(proc[i - 1].fd[0]);
-	}
-	while (input)
-	{
-		redirect_input_file(input);
-		input = input->next;
-	}
-}
+// 	input = info->commands[i].input;
+// 	if (i != 0)
+// 	{
+// 		dup2(proc[i - 1].fd[0], 0);
+// 		close(proc[i - 1].fd[0]);
+// 	}
+// 	while (input)
+// 	{
+// 		redirect_input_file(input);
+// 		input = input->next;
+// 	}
+// }
 
 static void	redirect_output_file(t_redirect *output)
 {
@@ -65,13 +65,13 @@ static void	redirect_output_file(t_redirect *output)
 	output_fd = 1;
 	if (output->fd != NULL)
 		output_fd = fd_check(output->fd);
-	if (output->type == 0 || output->type == 1)
+	if (output->type == 3 || output->type == 4)
 	{
 		if (output->file[0] != '/')
 			filepath = ft_strjoin("./", output->file);
 		else
 			filepath = ft_strdup(output->file);
-		if (output->type == 0)
+		if (output->type == 3)
 			fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
 			fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -85,25 +85,50 @@ static void	redirect_output_file(t_redirect *output)
 		print_error("input type error", 1);
 }
 
-static void	redirect_output(t_process *proc, t_info *info, int i)
-{
-	t_redirect	*output;
+// static void	redirect_output(t_process *proc, t_info *info, int i)
+// {
+// 	t_redirect	*output;
 
-	output = info->commands[i].output;
+// 	output = info->commands[i].output;
+// 	if (i != info->process_num - 1)
+// 	{
+// 		dup2(proc[i].fd[1], 1);
+// 		close(proc[i].fd[1]);
+// 	}
+// 	while (output)
+// 	{
+// 		redirect_output_file(output);
+// 		output = output->next;
+// 	}
+// }
+
+void	redirect_process(t_process *proc, t_info *info, int i)
+{
+	t_redirect *redirect;
+	
+	redirect = info->commands[i].redirect;
+	if (i != 0)
+	{
+		dup2(proc[i - 1].fd[0], 0);
+		close(proc[i - 1].fd[0]);
+	}
 	if (i != info->process_num - 1)
 	{
 		dup2(proc[i].fd[1], 1);
 		close(proc[i].fd[1]);
 	}
-	while (output)
+	while (redirect)
 	{
-		redirect_output_file(output);
-		output = output->next;
+		if (redirect->type == 3 || redirect->type == 4) //output일 떄 
+		{
+			redirect_output_file(redirect);
+		}
+		else //input일 때
+		{
+			redirect_input_file(redirect);
+		}
+		redirect = redirect -> next;
 	}
-}
-
-void	redirect_process(t_process *proc, t_info *info, int i)
-{
-	redirect_input(proc, info, i);
-	redirect_output(proc, info, i);
+	// redirect_input(proc, info, i);
+	// redirect_output(proc, info, i);
 }
