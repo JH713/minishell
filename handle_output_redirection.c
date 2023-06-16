@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:09:08 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/15 19:19:34 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:13:35 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_list	*handle_output_redirection(t_info *info, t_list *list, \
 	return (list);
 }
 
-static void	put_output2(t_info *info, char *content, t_command *command, char *file)
+static void	put_output2(t_info *info, char *content, \
+t_command *command, char *file)
 {
 	int			i;
 	char		*fd;

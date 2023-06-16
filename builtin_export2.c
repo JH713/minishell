@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:10:17 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 21:54:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:34:22 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	print_export_env(t_env *sorted_lst)
 		if (sorted_lst->value == NULL)
 			ft_printf("declare -x %s\n", sorted_lst->key);
 		else
-			ft_printf("declare -x %s=\"%s\"\n", sorted_lst->key, sorted_lst->value);
+			ft_printf("declare -x %s=\"%s\"\n", sorted_lst->key, \
+			sorted_lst->value);
 		sorted_lst = sorted_lst->next;
 	}
 }

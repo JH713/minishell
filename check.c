@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:06:29 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 18:47:18 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:44:30 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,35 @@ int	fd_check_in_single_bulletin(char *fd)
 	return (fd_num);
 }
 
+char	*check_file(char *command)
+{
+	struct stat	path_stat;
+
+	if (access(command, F_OK) != 0)
+		minishell_perror(command, 127);
+	if (access(command, X_OK) != 0)
+		minishell_perror(command, 126);
+	if (stat(command, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+		minishell_error(command, "is a directory", 126);
+	return (ft_strdup(command));
+}
+
 char	*execute_check(char *command, char **path)
 {
-	int		i;
-	char	*full_path;
-	struct stat path_stat;
+	int			i;
+	char		*full_path;
+	struct stat	path_stat;
 
 	if (command[0] == '.' || command[0] == '/')
-	{
-		if (access(command, F_OK) != 0)
-			minishell_perror(command, 127);
-		if (access(command, X_OK) != 0)
-			minishell_perror(command, 126);
-		if (stat(command, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
-			minishell_error(command, "is a directory", 126);
-		return (ft_strdup(command));
-	}
+		return (check_file(command));
 	i = 0;
 	if (path)
 	{
 		while (path[i])
 		{
 			full_path = ft_strjoin(path[i], command);
-			if (access(full_path, X_OK) == 0 && stat(full_path, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
+			if (access(full_path, X_OK) == 0 && \
+			stat(full_path, &path_stat) == 0 && S_ISREG(path_stat.st_mode))
 				return (full_path);
 			free(full_path);
 			++i;

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 19:19:43 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:28:55 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,12 @@ t_list		*handle_output_redirection(t_info *info, t_list *list, \
 t_list		*check_and_init(t_list *list, t_command *command, t_env *env_lst);
 t_list		*put_command(t_info *info, t_command *command, \
 							t_list *list, t_env *env_lst);
-t_info		*parse_command(char *command, t_env *env_lst);
 void		free_info(t_info *info);
 void		free_command(char **command);
 void		free_redirect(t_redirect *rd);
 void		free_heredocs(t_info *info);
 int			check_num(char *num);
-void		init(int argc, char **env, t_env **env_lst, char **command);
+t_env		*init(int argc, char *argv[], char **env, char **command);
 void		get_env_lst(t_env **env_lst, char **env);
 int			get_first_idx(char *str, char c);
 char		**get_path(t_env *env_lst);
@@ -188,5 +187,12 @@ void		print_maenggu(void);
 long long	ft_atol(const char *str);
 t_list		*handle_output_redirection2(t_info *info, t_list *list, \
 			t_env *env_lst, t_command *command);
+void		builtin_exit(t_info *info, char **command);
+void		exit_with_minus(char **command, unsigned char *exit_num);
+void		exit_with_plus(char **command, unsigned char *exit_num);
+void		exit_without_sign(char **command, unsigned char *exit_num);
+int			minishell_perror_not_exit(char *msg, int exit_num);
+void		set_shlvl(t_env **env_lst);
+void		set_oldpwd(t_env **env_lst);
 
 #endif

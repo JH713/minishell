@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 17:49:34 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/05 23:14:12 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:48:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,20 @@ int	check_env_name(char *str)
 	if (str[i] != 0)
 		return (0);
 	return (1);
+}
+
+void	get_env_lst(t_env **env_lst, char **env)
+{
+	t_env	*new;
+	int		i;
+
+	i = 0;
+	while (env[i])
+	{
+		new = env_lst_new(env[i]);
+		env_lst_add_back(env_lst, new);
+		++i;
+	}
+	set_shlvl(env_lst);
+	set_oldpwd(env_lst);
 }

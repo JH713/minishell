@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:17:55 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/10 00:57:58 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:45:30 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,12 @@ void	print_error_not_exit(char *msg, int status)
 	else if (status == 1)
 		ft_putendl_fd(msg, 2);
 	g_exit_status = 1;
+}
+
+int	minishell_perror_not_exit(char *msg, int exit_num)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(msg);
+	g_exit_status = exit_num;
+	return (-1);
 }

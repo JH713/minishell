@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:56:40 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 22:11:13 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:08:10 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,6 @@ char	**env_lst_to_arr(t_env *env_lst)
 	return (env);
 }
 
-void	env_lstdelone(t_env *lst)
-{
-	if (lst == NULL)
-		return ;
-	free(lst->key);
-	free(lst->value);
-	free(lst);
-}
-
 void	set_oldpwd(t_env **env_lst)
 {
 	t_env	*lst;
@@ -83,56 +74,4 @@ void	set_oldpwd(t_env **env_lst)
 			free(lst->value);
 		lst->value = NULL;
 	}
-}
-
-void	set_shlvl(t_env **env_lst)
-{
-	t_env	*lst;
-	char	*num;
-	int		n;
-
-	lst = get_lst_by_key(*env_lst, "SHLVL");
-	if (lst == NULL)
-	{
-		lst = env_lst_new("SHLVL=1");
-		env_lst_add_back(env_lst, lst);
-	}
-	else
-	{
-		num = lst->value;
-		if (!num && ft_strlen(num) > 4)
-			lst->value = ft_strdup("1");
-		else if (num[0] == '+' && check_num(&num[1]))
-			lst->value = ft_itoa(ft_atoi(num) + 1);
-		else if (check_num(num))
-		{
-			n = ft_atoi(num);
-			if (n >= 0 && n < 999)
-				lst->value = ft_itoa(n + 1);
-			else if (n == 999)
-				lst->value = ft_strdup("");
-			else
-				lst->value = ft_strdup("1");
-		}
-		else
-			lst->value = ft_strdup("1");
-		if (num)
-			free(num);
-	}
-}
-
-void	get_env_lst(t_env **env_lst, char **env)
-{
-	t_env	*new;
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		new = env_lst_new(env[i]);
-		env_lst_add_back(env_lst, new);
-		++i;
-	}
-	set_shlvl(env_lst);
-	set_oldpwd(env_lst);
 }

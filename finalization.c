@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:03:24 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 19:28:00 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:12:24 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,30 @@ int	unlink_heredocs(t_info *comm_info)
 	return (0);
 }
 
+void	wait_sig(int status)
+{
+	int	j;
+
+	if (WIFSIGNALED(status))
+	{
+		j = WTERMSIG(status);
+		if (j == 2)
+		{
+			g_exit_status = 130;
+			printf("\n");
+		}
+		else if (j == 3)
+		{
+			g_exit_status = 131;
+			printf("Quit: 3\n");
+		}
+	}
+}
+
 void	wait_all_child(t_info *info, t_process *process)
 {
 	int	i;
 	int	status;
-	int	j;
 
 	i = 0;
 	while (i < info->process_num)
@@ -37,20 +56,7 @@ void	wait_all_child(t_info *info, t_process *process)
 		waitpid(process[i].pid, &status, 0);
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status))
-		{
-			j = WTERMSIG(status);
-			if (j == 2)
-			{
-				g_exit_status = 130;
-				printf("\n");
-			}
-			else if (j == 3)
-			{
-				g_exit_status = 131;
-				printf("Quit: 3\n");
-			}
-		}
+		wait_sig(status);
 		++i;
 	}
 	cleanup_memory(info, process);

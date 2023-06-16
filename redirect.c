@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 21:55:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 20:00:21 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:47:00 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,6 @@ static void	redirect_input_file(t_redirect *input)
 		print_error("input type error", 1);
 }
 
-// static void	redirect_input(t_process *proc, t_info *info, int i)
-// {
-// 	t_redirect	*input;
-
-// 	input = info->commands[i].input;
-// 	if (i != 0)
-// 	{
-// 		dup2(proc[i - 1].fd[0], 0);
-// 		close(proc[i - 1].fd[0]);
-// 	}
-// 	while (input)
-// 	{
-// 		redirect_input_file(input);
-// 		input = input->next;
-// 	}
-// }
-
 static void	redirect_output_file(t_redirect *output)
 {
 	int		fd;
@@ -85,27 +68,10 @@ static void	redirect_output_file(t_redirect *output)
 		print_error("input type error", 1);
 }
 
-// static void	redirect_output(t_process *proc, t_info *info, int i)
-// {
-// 	t_redirect	*output;
-
-// 	output = info->commands[i].output;
-// 	if (i != info->process_num - 1)
-// 	{
-// 		dup2(proc[i].fd[1], 1);
-// 		close(proc[i].fd[1]);
-// 	}
-// 	while (output)
-// 	{
-// 		redirect_output_file(output);
-// 		output = output->next;
-// 	}
-// }
-
 void	redirect_process(t_process *proc, t_info *info, int i)
 {
-	t_redirect *redirect;
-	
+	t_redirect	*redirect;
+
 	redirect = info->commands[i].redirect;
 	if (i != 0)
 	{
@@ -119,16 +85,14 @@ void	redirect_process(t_process *proc, t_info *info, int i)
 	}
 	while (redirect)
 	{
-		if (redirect->type == 3 || redirect->type == 4) //output일 떄 
+		if (redirect->type == 3 || redirect->type == 4)
 		{
 			redirect_output_file(redirect);
 		}
-		else //input일 때
+		else
 		{
 			redirect_input_file(redirect);
 		}
 		redirect = redirect -> next;
 	}
-	// redirect_input(proc, info, i);
-	// redirect_output(proc, info, i);
 }

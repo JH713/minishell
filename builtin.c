@@ -6,57 +6,11 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 19:50:33 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 11:44:35 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	builtin_exit(t_info *info, char **command)
-{
-	unsigned char	exit_num;
-
-	exit_num = 0;
-	unlink_heredocs(info);
-	if (command[1])
-	{
-		if (command[2])
-			minishell_error(command[0], "too many arguments", 1);
-			minishell_arg_error(command[0], command[1], \
-			"numeric argument required", 255);
-		if (command[1][0] == '-')
-		{
-			if (ft_strlen(command[1]) > 20 || !check_num(&command[1][1]) || ft_atol(command[1]) > 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(command[1], "-9223372036854775809", 21) == 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(command[1]);
-		}
-		else if (command[1][0] == '+')
-		{
-			if (ft_strlen(command[1]) > 20 || !check_num(&command[1][1]) || ft_atol(command[1]) < 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(command[1], "+9223372036854775808", 21) == 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(command[1]);
-		}
-		else
-		{
-			if (ft_strlen(command[1]) > 19 || !check_num(command[1]) || ft_atol(command[1]) < 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(command[1], "9223372036854775808", 20) == 0)
-				minishell_arg_error(command[0], command[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(command[1]);
-		}
-	}
-	exit(exit_num);
-}
 
 static int	builtin_env(char **env, int env_num)
 {

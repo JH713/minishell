@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:07:00 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 21:50:51 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:33:58 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ static void	update_or_add_env(t_env **env_lst, char **env, char *key, int i)
 	}
 }
 
+void	export_error(char *env, int *flag)
+{
+	minishell_argstr_error("export", env, "not a valid identifier", 1);
+	*flag = 0;
+}
+
 static int	export_env(t_env **env_lst, char **env)
 {
 	int		i;
@@ -61,17 +67,13 @@ static int	export_env(t_env **env_lst, char **env)
 	int		flag;
 	char	*key;
 
-	i = 0;
+	i = -1;
 	flag = 1;
-	while (env[i])
+	while (env[++i])
 	{
 		idx = get_first_idx(env[i], '=');
 		if (idx == 0)
-		{
-			minishell_argstr_error("export", env[i], \
-			"not a valid identifier", 1);
-			flag = 0;
-		}
+			export_error(env[i], &flag);
 		else
 		{
 			if (idx == -1)
@@ -83,7 +85,6 @@ static int	export_env(t_env **env_lst, char **env)
 			update_or_add_env(env_lst, env, key, i);
 			free(key);
 		}
-			++i;
 	}
 	return (flag);
 }

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:16:48 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 19:25:45 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:46:02 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,6 @@ static char	last_char_without_whitespace(char *str)
 		return (0);
 	return (str[i]);
 }
-
-// static void	handle_exit_status(void)
-// {
-// 	if (g_exit_status == 2)
-// 	{
-// 		g_exit_status = 130;
-// 		printf("\n");
-// 	}
-// 	else if (g_exit_status == 3)
-// 	{
-// 		g_exit_status = 131;
-// 		printf("Quit: 3\n");
-// 	}
-// }
 
 static int	is_whitespace_only(char *command)
 {
@@ -61,7 +47,6 @@ char	*read_command(void)
 {
 	char	*command;
 
-	// handle_exit_status();
 	command = readline("minishell$ ");
 	if (command == NULL)
 	{

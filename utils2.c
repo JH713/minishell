@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:17:10 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/13 18:08:24 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:21:30 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,13 @@ long long	ft_atol(const char *str)
 		str++;
 	}
 	return (result * is_positive);
+}
+
+void	env_lstdelone(t_env *lst)
+{
+	if (lst == NULL)
+		return ;
+	free(lst->key);
+	free(lst->value);
+	free(lst);
 }

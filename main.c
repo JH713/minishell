@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 20:16:51 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:38:56 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	print_maenggu(void)
 	close(fd);
 }
 
-t_info	*parse_command(char *command, t_env *env_lst)
+static t_info	*parse_command(char *command, t_env *env_lst)
 {
 	t_list	*list;
 	t_info	*info;
@@ -54,16 +54,11 @@ t_info	*parse_command(char *command, t_env *env_lst)
 	return (info);
 }
 
-void	set_last_arg(t_info *info, t_env **env_lst)
+static void	clear_last_arg(t_info *info, t_env **env_lst)
 {
 	t_env	*lst;
-	char	*value;
 	char	*tmp;
-	char	**command;
 
-	value = NULL;
-	int i = 0;
-	int	j;
 	if (info->process_num != 1)
 	{
 		lst = get_lst_by_key(*env_lst, "_");
@@ -73,25 +68,34 @@ void	set_last_arg(t_info *info, t_env **env_lst)
 			free(tmp);
 		return ;
 	}
-	while (i < info->process_num)
+}
+
+static void	set_last_arg(t_info *info, t_env **env_lst)
+{
+	t_env	*lst;
+	char	*value;
+	char	*tmp;
+	int		j;
+
+	value = NULL;
+	clear_last_arg(info, env_lst);
+	if (info->process_num == 1)
 	{
-		command = info->commands[i].command;
 		j = 0;
-		while (command[j])
+		while (info->commands[0].command[j])
 		{
-			value = command[j];
+			value = info->commands[0].command[j];
 			++j;
 		}
-		++i;
+		lst = get_lst_by_key(*env_lst, "_");
+		tmp = lst->value;
+		if (value == NULL)
+			lst->value = ft_strdup("");
+		else
+			lst->value = ft_strdup(value);
+		if (tmp)
+			free(tmp);
 	}
-	lst = get_lst_by_key(*env_lst, "_");
-	tmp = lst->value;
-	if (value == NULL)
-		lst->value = ft_strdup("");
-	else
-		lst->value = ft_strdup(value);
-	if (tmp)
-		free(tmp);
 }
 
 int	main(int argc, char *argv[], char **env)
@@ -101,8 +105,7 @@ int	main(int argc, char *argv[], char **env)
 	t_info		*info;
 	t_process	*process;
 
-	(void)argv;
-	init(argc, env, &env_lst, &command);
+	env_lst = init(argc, argv, env, &command);
 	while (1)
 	{
 		init_in_while(command);

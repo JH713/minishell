@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:45:06 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 19:27:04 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 11:56:05 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,35 +40,11 @@ static int	exec_single_exit(t_info *info, char **cmd)
 		}
 		unlink_heredocs(info);
 		if (cmd[1][0] == '-')
-		{
-			if (ft_strlen(cmd[1]) > 20 || !check_num(&cmd[1][1]) || ft_atol(cmd[1]) > 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(cmd[1], "-9223372036854775809", 21) == 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(cmd[1]);
-		}
+			exit_with_minus(cmd, &exit_num);
 		else if (cmd[1][0] == '+')
-		{
-			if (ft_strlen(cmd[1]) > 20 || !check_num(&cmd[1][1]) || ft_atol(cmd[1]) < 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(cmd[1], "+9223372036854775808", 21) == 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(cmd[1]);
-		}
+			exit_with_plus(cmd, &exit_num);
 		else
-		{
-			if (ft_strlen(cmd[1]) > 19 || !check_num(cmd[1]) || ft_atol(cmd[1]) < 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			if (ft_strncmp(cmd[1], "9223372036854775808", 20) == 0)
-				minishell_arg_error(cmd[0], cmd[1], \
-				"numeric argument required", 255);
-			exit_num = (unsigned char) ft_atol(cmd[1]);
-		}
+			exit_without_sign(cmd, &exit_num);
 	}
 	else
 		unlink_heredocs(info);

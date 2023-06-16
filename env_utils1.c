@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/14 21:47:30 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:45:05 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_env	*env_lst_new(char *env)
 	else
 	{
 		new_lst->key = ft_substr(env, 0, idx);
-		new_lst->value = ft_substr(env, idx + 1, ft_strlen(env) - 1 - idx);	
+		new_lst->value = ft_substr(env, idx + 1, ft_strlen(env) - 1 - idx);
 	}
 	new_lst->next = NULL;
 	return (new_lst);
