@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 21:55:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 13:47:00 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 22:46:06 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,9 @@ void	redirect_process(t_process *proc, t_info *info, int i)
 	while (redirect)
 	{
 		if (redirect->type == 3 || redirect->type == 4)
-		{
 			redirect_output_file(redirect);
-		}
 		else
-		{
 			redirect_input_file(redirect);
-		}
 		redirect = redirect -> next;
 	}
 }

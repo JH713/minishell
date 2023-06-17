@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/17 15:41:41 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:39:45 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int			get_first_idx(char *str, char c);
 char		**get_path(t_env *env_lst);
 void		env_lst_add_back(t_env **lst, t_env *new);
 t_env		*env_lst_new(char *env);
-void		print_env(char **env, int env_num);
+void		print_env(char **env);
 void		minishell_error_not_exit(char *cmd, char *err_msg, int exit_num);
 void		minishell_error(char *command, char *err_msg, int exit_num);
 void		minishell_arg_error(char *cmd, char *arg, char *msg, int exit_num);
@@ -196,5 +196,7 @@ void		set_shlvl(t_env **env_lst);
 void		set_oldpwd(t_env **env_lst);
 void		save_file_name(t_redirect *input, t_redirect *redirect, \
 			char *tempfile);
+int			redirect_process2(t_process *proc, t_info *info, int i);
+char		*check_cmd3(char *content, t_env *env_lst);
 
 #endif

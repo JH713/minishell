@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:07:00 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/17 15:06:35 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 23:00:47 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,10 @@ int	builtin_export(char **command, t_env **env_lst, char **env)
 		if (command[1][0] == '-')
 			return (0);
 		if (export_env(env_lst, &command[1]) == 0)
+		{
+			free_env_arr(env);
 			return (-1);
+		}
 	}
 	free_env_arr(env);
 	return (1);

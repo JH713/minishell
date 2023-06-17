@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:33:32 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/15 19:09:28 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:04:11 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ t_list	*put_command(t_info *info, t_command *command, \
 		content = list -> content;
 		len = ft_strlen(content);
 		if (content[len - 1] == '<')
+		{
 			list = handle_input_redirection(info, list, env_lst, command);
+		}
 		else if (content[len - 1] == '>')
 		{
 			handle_output_redirection2(info, list, env_lst, command);

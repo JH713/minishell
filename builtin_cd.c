@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:33:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 12:38:23 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 22:27:13 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	builtin_cd(char **command, t_env **env_lst, char **env)
 		}
 		ret = chdir(command[1]);
 	}
+	free_env_arr(env);
 	if (ret == -1)
 		return (minishell_perror_not_exit("cd", 1));
-	free_env_arr(env);
 	return (1);
 }

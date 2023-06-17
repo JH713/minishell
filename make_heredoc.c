@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/17 14:57:21 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 23:38:30 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,10 @@ t_info *info, int j)
 }
 
 static int	process_heredoc_inputs(t_redirect *input, \
-t_redirect *redirect, t_info *info)
+t_redirect *redirect, t_info *info, int *j)
 {
-	int	j;
 	int	ret;
 
-	j = 0;
 	while (input)
 	{
 		if (input->type == 0)
@@ -95,12 +93,12 @@ t_redirect *redirect, t_info *info)
 		}
 		while (redirect->type != 1 && redirect->type != 2)
 			redirect = redirect->next;
-		ret = heredoc_input(input, redirect, info, j);
+		ret = heredoc_input(input, redirect, info, *j);
 		if (ret == 0)
 			return (unlink_heredocs(info));
 		input = input->next;
 		redirect = redirect->next;
-		j++;
+		(*j)++;
 	}
 	return (1);
 }
@@ -108,17 +106,19 @@ t_redirect *redirect, t_info *info)
 int	create_heredoc_temp(t_info *info)
 {
 	int			i;
+	int			j;
 	t_redirect	*input;
 	t_redirect	*redirect;
 
 	i = 0;
+	j = 0;
 	malloc_heredocs(info);
 	signal(SIGINT, SIG_IGN);
 	while (i < info->process_num)
 	{
 		input = info->commands[i].input;
 		redirect = info->commands[i].redirect;
-		if (process_heredoc_inputs(input, redirect, info) == 0)
+		if (process_heredoc_inputs(input, redirect, info, &j) == 0)
 		{
 			free_info(info);
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:58:33 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 13:45:05 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 22:10:49 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,17 @@ t_env	*env_lst_new(char *env)
 	return (new_lst);
 }
 
-void	print_env(char **env, int env_num)
+void	print_env(char **env)
 {
 	int	i;
 
 	i = 0;
-	while (i < env_num)
+	while (env[i])
 	{
-		if (env[i])
-		{
-			if (ft_strncmp(env[i], "_=env", 6) == 0)
-				ft_putendl_fd("_=/usr/bin/env", 1);
-			else
-				ft_putendl_fd(env[i], 1);
-		}
+		if (ft_strncmp(env[i], "_=env", 6) == 0)
+			ft_putendl_fd("_=/usr/bin/env", 1);
+		else
+			ft_putendl_fd(env[i], 1);
 		++i;
 	}
 }

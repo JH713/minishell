@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:45:06 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 11:56:05 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:40:07 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	exec_single_builtin(t_info *info, t_env **env_lst)
 	char			**cmd;
 
 	cmd = info->commands[0].command;
-	redirect_process(NULL, info, 0);
+	if (!redirect_process2(NULL, info, 0))
+		return (-1);
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
 	{
 		exec_single_exit(info, cmd);

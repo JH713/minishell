@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:09:47 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 11:44:35 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 22:11:38 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static int	builtin_env(char **env, int env_num)
 {
-	print_env(env, env_num);
+	(void) env_num;
+	print_env(env);
 	free_env_arr(env);
 	return (1);
 }

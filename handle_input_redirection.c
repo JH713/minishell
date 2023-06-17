@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:07:01 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/16 13:47:55 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:22:15 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ t_list	*handle_input_redirection(t_info *info, \
 {
 	char	*file;
 
-	file = check_cmd2(list -> next -> content, env_lst);
+	if (ft_strncmp(list->content, "<<", 3) == 0)
+		file = check_cmd3(list -> next -> content, env_lst);
+	else
+		file = check_cmd2(list -> next -> content, env_lst);
 	put_input(info, list, command, file);
 	list = list -> next;
 	return (list);
