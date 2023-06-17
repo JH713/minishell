@@ -6,7 +6,7 @@
 #    By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 21:56:35 by jihyeole          #+#    #+#              #
-#    Updated: 2023/06/16 14:08:31 by jihyeole         ###   ########.fr        #
+#    Updated: 2023/06/17 15:53:46 by jihyeole         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCS = main.c init.c utils.c env_utils1.c env_utils2.c make_heredoc.c \
 	   builtin_exit.c set_shlvl.c
 OBJS = $(SRCS:.c=.o)
 CC = CC
-CFLAGS = -Wall -Wextra -Werror -I ~/.brew/opt/readline/include
+CFLAGS = -Wall -Wextra -Werror -I ~/.brew/opt/readline/include 
 LIBS = -Llibft -lft
 
 all : $(NAME)

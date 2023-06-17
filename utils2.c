@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:17:10 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 14:21:30 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 14:57:57 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,12 @@ void	env_lstdelone(t_env *lst)
 	free(lst->key);
 	free(lst->value);
 	free(lst);
+}
+
+void	save_file_name(t_redirect *input, t_redirect *redirect, char *tempfile)
+{
+	free(input->file);
+	free(redirect->file);
+	input->file = tempfile;
+	redirect->file = ft_strdup(tempfile);
 }

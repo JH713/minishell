@@ -6,25 +6,28 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:21:49 by hyunjki2          #+#    #+#             */
-/*   Updated: 2023/06/13 16:16:09 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:42:49 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"minishell.h"
 
-void	get_environment_variable_value(char *line, \
+int	get_environment_variable_value(char *line, \
 		t_env *env_lst, char **env_value, int j)
 {
 	t_env	*lst;
 	char	*env_key;
+	int		key_len;
 
 	env_key = ft_substr(line, 0, j - 1);
 	lst = get_lst_by_key(env_lst, env_key);
+	key_len = ft_strlen(env_key);
 	free(env_key);
 	if (lst == NULL)
 		*env_value = "";
 	else
 		*env_value = lst->value;
+	return (key_len);
 }
 
 int	check_prev_quotes(char *line, int i)

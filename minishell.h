@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 14:28:55 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:41:41 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void		join_env_2(char **line, char *env_value, int start, int end);
 int			check_prev_quotes(char *line, int i);
 void		handle_variable_expansion(char **line, int flag, int *i, int *j);
 void		handle_exit_status_variable(char **line, int *i, char **env_value);
-void		get_environment_variable_value(char *line, \
+int			get_environment_variable_value(char *line, \
 					t_env *env_lst, char **env_value, int j);
 int			expand_env_inner(char **line, t_env *env_lst, int *i, int flag);
 void		check_quotes_env(char **line, t_env *env_lst, int *i);
@@ -194,5 +194,7 @@ void		exit_without_sign(char **command, unsigned char *exit_num);
 int			minishell_perror_not_exit(char *msg, int exit_num);
 void		set_shlvl(t_env **env_lst);
 void		set_oldpwd(t_env **env_lst);
+void		save_file_name(t_redirect *input, t_redirect *redirect, \
+			char *tempfile);
 
 #endif

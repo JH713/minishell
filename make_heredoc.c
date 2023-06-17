@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:54:39 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 19:28:30 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 14:57:21 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static void	hd_child_proc(char *tmp, t_redirect *input, t_info *info, int type)
 	exit(0);
 }
 
-static int	heredoc_input(t_redirect *input, t_info *info, int type, int j)
+static int	heredoc_input(t_redirect *input, t_redirect *redirect, \
+t_info *info, int j)
 {
 	char		*tempfile;
 	pid_t		pid;
@@ -60,13 +61,12 @@ static int	heredoc_input(t_redirect *input, t_info *info, int type, int j)
 	tempfile = get_temp_name();
 	pid = fork();
 	if (pid == 0)
-		hd_child_proc(tempfile, input, info, type);
+		hd_child_proc(tempfile, input, info, input->type);
 	waitpid(pid, &status, 0);
 	stat = 0;
 	if (WIFEXITED(status))
 		stat = WEXITSTATUS(status);
-	free(input->file);
-	input->file = tempfile;
+	save_file_name(input, redirect, tempfile);
 	info->heredocs[j] = ft_strdup(input->file);
 	if (stat == 2)
 	{
@@ -79,7 +79,8 @@ static int	heredoc_input(t_redirect *input, t_info *info, int type, int j)
 	return (1);
 }
 
-static int	process_heredoc_inputs(t_redirect *input, t_info *info)
+static int	process_heredoc_inputs(t_redirect *input, \
+t_redirect *redirect, t_info *info)
 {
 	int	j;
 	int	ret;
@@ -92,10 +93,13 @@ static int	process_heredoc_inputs(t_redirect *input, t_info *info)
 			input = input->next;
 			continue ;
 		}
-		ret = heredoc_input(input, info, input->type, j);
+		while (redirect->type != 1 && redirect->type != 2)
+			redirect = redirect->next;
+		ret = heredoc_input(input, redirect, info, j);
 		if (ret == 0)
 			return (unlink_heredocs(info));
 		input = input->next;
+		redirect = redirect->next;
 		j++;
 	}
 	return (1);
@@ -105,6 +109,7 @@ int	create_heredoc_temp(t_info *info)
 {
 	int			i;
 	t_redirect	*input;
+	t_redirect	*redirect;
 
 	i = 0;
 	malloc_heredocs(info);
@@ -112,7 +117,8 @@ int	create_heredoc_temp(t_info *info)
 	while (i < info->process_num)
 	{
 		input = info->commands[i].input;
-		if (process_heredoc_inputs(input, info) == 0)
+		redirect = info->commands[i].redirect;
+		if (process_heredoc_inputs(input, redirect, info) == 0)
 		{
 			free_info(info);
 			return (0);

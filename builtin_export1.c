@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 23:07:00 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 13:33:58 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:06:35 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	export_env(t_env **env_lst, char **env)
 
 	i = -1;
 	flag = 1;
-	while (env[++i])
+	while (env[i] && env[++i])
 	{
 		idx = get_first_idx(env[i], '=');
 		if (idx == 0)
