@@ -6,25 +6,13 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:33:01 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/18 00:05:11 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:28:22 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_exit_status;
-
-void	print_maenggu(void)
-{
-	int		fd;
-	size_t	length;
-	char	buff[500001];
-
-	fd = open("maenggu", O_RDONLY);
-	length = read(fd, buff, 500000);
-	write(1, buff, length);
-	close(fd);
-}
 
 static t_info	*parse_command(char *command, t_env *env_lst)
 {

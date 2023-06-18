@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/18 00:39:45 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:28:49 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ t_env		*get_sorted_lst(t_env *env_lst);
 int			jh_strcmp(char	*s1, char *s2);
 int			builtin_cd(char **command, t_env **env_lst, char **env);
 void		print_error_not_exit(char *msg, int status);
-void		print_maenggu(void);
 long long	ft_atol(const char *str);
 t_list		*handle_output_redirection2(t_info *info, t_list *list, \
 			t_env *env_lst, t_command *command);
@@ -198,5 +197,7 @@ void		save_file_name(t_redirect *input, t_redirect *redirect, \
 			char *tempfile);
 int			redirect_process2(t_process *proc, t_info *info, int i);
 char		*check_cmd3(char *content, t_env *env_lst);
+void		print_maenggu1(void);
+void		print_maenggu2(void);
 
 #endif

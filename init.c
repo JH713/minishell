@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 05:38:27 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 14:27:32 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:29:27 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_env	*init(int argc, char *argv[], char **env, char **command)
 	env_lst = NULL;
 	get_env_lst(&env_lst, env);
 	*command = NULL;
-	print_maenggu();
+	print_maenggu1();
+	print_maenggu2();
 	return (env_lst);
 }
 
