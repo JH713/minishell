@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:08:19 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/15 19:18:17 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/19 18:27:12 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ void	execute_command(t_process *proc, int i, t_info *info, t_env **lst)
 	redirect_process(proc, info, i);
 	command = info->commands[i].command;
 	if (command[0] == NULL || builtin_func(info, command, lst))
-	{
-		unlink_heredocs(info);
 		exit(0);
-	}
 	full_path = execute_check(command[0], path);
 	free(command[0]);
 	command[0] = full_path;

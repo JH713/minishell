@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:01:25 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/18 12:28:49 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/19 17:57:01 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ void		minishell_error(char *command, char *err_msg, int exit_num);
 void		minishell_arg_error(char *cmd, char *arg, char *msg, int exit_num);
 void		minishell_perror(char *msg, int exit_num);
 void		print_error(char *msg, int status);
-int			unlink_heredocs(t_info *comm_info);
 int			create_heredoc_temp(t_info *info);
 void		join_env(char **line, char *env_value, int start, int end);
 void		expand_env(char **line, t_env *env_lst);
