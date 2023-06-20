@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:45:06 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/19 18:00:21 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:10:01 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ int	check_num(char *num)
 	return (1);
 }
 
+static void	exit_process(char **cmd, unsigned char *exit_num)
+{
+	if (cmd[1][0] == '-')
+		exit_with_minus(cmd, exit_num);
+	else if (cmd[1][0] == '+')
+		exit_with_plus(cmd, exit_num);
+	else
+		exit_without_sign(cmd, exit_num);
+}
+
 static int	exec_single_exit(t_info *info, char **cmd)
 {
 	unsigned char	exit_num;
@@ -35,16 +45,12 @@ static int	exec_single_exit(t_info *info, char **cmd)
 	{
 		if (cmd[2])
 		{
+			exit_process(cmd, &exit_num);
 			minishell_error_not_exit(cmd[0], "too many arguments", 1);
 			return (-1);
 		}
 		unlink_heredocs(info);
-		if (cmd[1][0] == '-')
-			exit_with_minus(cmd, &exit_num);
-		else if (cmd[1][0] == '+')
-			exit_with_plus(cmd, &exit_num);
-		else
-			exit_without_sign(cmd, &exit_num);
+		exit_process(cmd, &exit_num);
 	}
 	else
 		unlink_heredocs(info);

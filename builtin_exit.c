@@ -6,7 +6,7 @@
 /*   By: jihyeole <jihyeole@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 11:44:20 by jihyeole          #+#    #+#             */
-/*   Updated: 2023/06/16 11:55:29 by jihyeole         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:01:29 by jihyeole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,15 @@ void	builtin_exit(t_info *info, char **command)
 	if (command[1])
 	{
 		if (command[2])
+		{
+			if (command[1][0] == '-')
+				exit_with_minus(command, &exit_num);
+			else if (command[1][0] == '+')
+				exit_with_plus(command, &exit_num);
+			else
+				exit_without_sign(command, &exit_num);
 			minishell_error(command[0], "too many arguments", 1);
+		}
 		if (command[1][0] == '-')
 			exit_with_minus(command, &exit_num);
 		else if (command[1][0] == '+')
